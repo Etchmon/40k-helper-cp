@@ -6,14 +6,14 @@ class GameController {
   }
 
   async start() {
-    pool.query("SELECT * FROM factions", (err, res) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
+    try {
+      const res = await pool.query("SELECT * FROM factions");
       this.gameData.factions = res.rows;
-      return this.gameData;
-    });
+      return this.gameData.factions;
+    } catch (err) {
+      console.error(err);
+      throw err;
+    }
   }
 }
 

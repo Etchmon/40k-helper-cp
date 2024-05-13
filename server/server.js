@@ -28,8 +28,8 @@ app.get("/api/data", async (req, res) => {
 
 app.post("/api/game/start", async (req, res) => {
   try {
-    gameController.startGame();
-    res.status(200).json({ nextComponent: "Factions" });
+    const result = await gameController.start();
+    res.status(200).json(result);
   } catch (err) {
     console.error(err);
     res.status(500).json({

@@ -18,10 +18,11 @@ function Game() {
   }, []);
 
   async function startGame() {
-    const response = await fetch("localhost:5000/api/game/start", {
+    const response = await fetch("http://localhost:5000/api/game/start", {
       method: "POST",
     });
     const data = await response.json();
+    console.log(data);
     showComponent(data.nextComponent);
   }
 
