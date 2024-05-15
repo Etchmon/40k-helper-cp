@@ -8,6 +8,7 @@ function App() {
   const startGame = () => {
     navigate("/game");
   };
+
   return (
     <div className="App">
       <header className="App-header">

@@ -23,6 +23,7 @@ function Game() {
     });
     const data = await response.json();
     console.log(data);
+    // Use data to display factions to choose from
     showComponent(data.nextComponent);
   }
 
@@ -33,6 +34,7 @@ function Game() {
   }
 
   async function getGameData() {
+    // Create dynamic routes for getting game data, set up unique game id's that can be used to retrieve data about past games
     const response = await fetch("/api/game/data", { method: "GET" });
     const data = await response.json();
     setGameData(data);
