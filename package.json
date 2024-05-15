@@ -12,5 +12,8 @@
   "description": "",
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.0"
   }
 }
