@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const pool = require("./src/database/db");
+const GameController = require("./src/controllers/gameController");
+const gameController = new GameController();
 
 const app = express();
 
@@ -20,6 +22,18 @@ app.get("/api/data", async (req, res) => {
     console.error(err);
     res.status(500).json({
       error: "Incorrect query || Data does not exisit || Internal Server Error",
+    });
+  }
+});
+
+app.post("/api/game/start", async (req, res) => {
+  try {
+    const result = await gameController.start();
+    res.status(200).json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      error: "Internal Server Error",
     });
   }
 });
