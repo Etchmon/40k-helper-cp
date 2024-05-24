@@ -25,7 +25,6 @@ const Button = React.forwardRef(
         {...props}
       >
         {icon && <span className="icon">{icon}</span>}
-        {children}
         <span className="label">{children}</span>
       </button>
     );
