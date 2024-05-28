@@ -14,7 +14,7 @@ export const LandingRoute = () => {
   };
 
   return (
-    <div className="App">
+    <div className="App min-h-screen bg-gray-700 text-stone-50">
       <header className="App-header">
         <h1 className="landing-header">
           In the grim darkness of the far future there is only war...
