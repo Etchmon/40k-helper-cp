@@ -37,3 +37,15 @@ app.post("/api/game/start", async (req, res) => {
     });
   }
 });
+
+app.get("/api/game/start", async (req, res) => {
+  try {
+    const result = await gameController.start();
+    res.status(200).json(result);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      error: "Internal Server Error",
+    });
+  }
+});

@@ -7,7 +7,7 @@ export const LandingRoute = () => {
 
   const handleStart = () => {
     if (localStorage.getItem("token")) {
-      navigate("/game");
+      navigate("/app/game");
     } else {
       navigate("/");
     }
