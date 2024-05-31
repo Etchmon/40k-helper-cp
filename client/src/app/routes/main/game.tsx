@@ -5,8 +5,16 @@ import {
   useFactions,
   getFactionsQueryOptions,
 } from "@/features/prep/api/get-factions";
+
+// UNCOMMENT WHEN REACT QUERY IS NEEDED
 // import { queryConfig } from "@/lib/react-query";
 
+// This route loads the BattleSettings component that begins a game and sets up the state for the game
+// Once BattleSetting is complete, the game will begin and the Game component will be loaded
+// User should be able to toggle between settings and game component to alter settings if needed during game
+
+// Temporary loader function
+// Change this function to a getPreGameQueryOptions that encompasses all the queries needed for the game
 export const gameLoader = (queryClient: QueryClient) => async () => {
   const gameQuery = getFactionsQueryOptions();
 
