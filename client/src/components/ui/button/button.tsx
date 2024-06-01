@@ -1,20 +1,27 @@
 import { cva, type VariantProps } from "class-variance-authority";
 import React from "react";
 
-const buttonVariants = cva("button-base", {
-  variants: {
-    variant: {
-      default: "button-default",
+const buttonVariants = cva(
+  "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+  {
+    variants: {
+      variant: {
+        default: "bg-teal text-slate-950 shadow hover:bg-teal/90",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-9 px-6 py-3",
+        sm: "h-8 rounded-md px-4 text-xs",
+        lg: "h-10 rounded-md px-10",
+        icon: "size-9",
+      },
     },
-    size: {
-      default: "button-size-default",
+    defaultVariants: {
+      variant: "default",
+      size: "default",
     },
-  },
-  defaultVariants: {
-    variant: "default",
-    size: "default",
-  },
-});
+  }
+);
 
 export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
   VariantProps<typeof buttonVariants> & {
