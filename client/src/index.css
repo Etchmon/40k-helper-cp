@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --crust: 240, 23%, 9%;
+    --mantle: 240, 21%, 12%;
+    --base: 240, 21%, 15%;
+    --surface0: 237, 16%, 23%;
+    --surface1: 234, 13%, 31%;
+    --surface2: 233, 12%, 39%;
+    --overlay0: 231, 11%, 47%;
+    --overlay1: 236, 41%, 64%;
+    --overlay2: 228, 17%, 64%;
+    --subtext0: 228, 24%, 72%;
+    --subtext1: 227, 35%, 80%;
+    --text: 226, 64%, 88%;
+    --lavender: 232, 97%, 85%;
+    --blue: 217, 92%, 76%;
+    --sapphire: 199, 76%, 69%;
+    --sky: 189, 71%, 73%;
+    --teal: 87, 85%, 54%;
+    --yellow: 322, 94%, 58%;
+    --peach: 23, 92%, 75%;
+    --maroon: 350, 65%, 77%;
+    --red: 343, 81%, 75%;
+    --mauve: 267, 84%, 81%;
+    --pink: 316, 72%, 86%;
+    --flamingo: 0, 59%, 88%;
+    --rosewater: 10, 56%, 91%;
+  }
+}

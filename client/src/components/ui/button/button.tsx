@@ -6,7 +6,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-teal text-slate-950 shadow hover:bg-teal/90",
+        default: "bg-slate-50 text-slate-950 shadow hover:bg-slate-50/90",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {

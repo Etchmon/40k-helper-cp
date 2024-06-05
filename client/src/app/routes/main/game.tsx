@@ -5,6 +5,7 @@ import {
   useFactions,
   getFactionsQueryOptions,
 } from "@/features/prep/api/get-factions";
+import { Head } from "@/components/seo/head";
 
 // UNCOMMENT WHEN REACT QUERY IS NEEDED
 // import { queryConfig } from "@/lib/react-query";
@@ -39,9 +40,12 @@ export const GameRoute = () => {
   const factionQuery = useFactions();
   return (
     <>
-      {/* Head */}
+      <Head title="Game" />
       {/* layout */}
       {console.log(factionQuery.data)}
+      <div className="relative flex items-center h-screen bg-base">
+        <h2 className="text-2xl font-bold text-center">Game</h2>
+      </div>
     </>
   );
 };
