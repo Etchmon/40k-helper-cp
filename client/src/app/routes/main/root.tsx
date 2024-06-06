@@ -2,10 +2,12 @@ import { Suspense } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { Outlet, useLocation } from "react-router-dom";
 
+import { DashboardLayout } from "@/components/layouts";
+
 export const AppRoot = () => {
   const location = useLocation();
   return (
-    <main>
+    <DashboardLayout>
       <Suspense
         fallback={
           <div className="h-screen w-screen flex items-center justify-center">
@@ -20,6 +22,6 @@ export const AppRoot = () => {
           <Outlet />
         </ErrorBoundary>
       </Suspense>
-    </main>
+    </DashboardLayout>
   );
 };
