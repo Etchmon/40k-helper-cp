@@ -43,8 +43,10 @@ export const GameRoute = () => {
       <Head title="Game" />
       {/* layout */}
       {console.log(factionQuery.data)}
-      <div className="relative flex items-center h-screen bg-base">
-        <h2 className="text-2xl font-bold text-center text-text">Game</h2>
+      <div className="relative items-center h-screen bg-base">
+        <h2 className="text-2xl font-bold text-center text-text m-[10vh]">
+          Game
+        </h2>
       </div>
     </>
   );
