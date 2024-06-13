@@ -37,6 +37,8 @@ export const GameRoute = () => {
   //     winner: ".",
   //   });
 
+  // Button that changes a state which controls which component is displayed, settings or battle
+
   const factionQuery = useFactions();
   return (
     <>
@@ -45,7 +47,7 @@ export const GameRoute = () => {
       {console.log(factionQuery.data)}
       <div className="relative items-center h-screen bg-base">
         <h2 className="text-2xl font-bold text-center text-text m-[10vh]">
-          Game
+          Active Component
         </h2>
       </div>
     </>
