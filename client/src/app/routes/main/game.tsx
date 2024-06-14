@@ -6,6 +6,7 @@ import {
   getFactionsQueryOptions,
 } from "@/features/prep/api/get-factions";
 import { Head } from "@/components/seo/head";
+import { useState } from "react";
 
 // UNCOMMENT WHEN REACT QUERY IS NEEDED
 // import { queryConfig } from "@/lib/react-query";
@@ -18,6 +19,8 @@ import { Head } from "@/components/seo/head";
 // Change this function to a getPreGameQueryOptions that encompasses all the queries needed for the game
 export const gameLoader = (queryClient: QueryClient) => async () => {
   const gameQuery = getFactionsQueryOptions();
+
+  const [gameToggle, setGameToggle] = useState<boolean>(false);
 
   return (
     queryClient.getQueryData(gameQuery.queryKey) ??
