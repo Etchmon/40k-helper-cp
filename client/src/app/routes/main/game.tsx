@@ -7,6 +7,7 @@ import {
 } from "@/features/prep/api/get-factions";
 import { Head } from "@/components/seo/head";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 
 // UNCOMMENT WHEN REACT QUERY IS NEEDED
 // import { queryConfig } from "@/lib/react-query";
@@ -20,8 +21,6 @@ import { useState } from "react";
 export const gameLoader = (queryClient: QueryClient) => async () => {
   const gameQuery = getFactionsQueryOptions();
 
-  const [gameToggle, setGameToggle] = useState<boolean>(false);
-
   return (
     queryClient.getQueryData(gameQuery.queryKey) ??
     (await queryClient.fetchQuery(gameQuery))
@@ -29,19 +28,19 @@ export const gameLoader = (queryClient: QueryClient) => async () => {
 };
 
 export const GameRoute = () => {
-  //   const [gameData, setGameData] = useState({
-  //     player1: ".",
-  //     player2: ".",
-  //     misson: ".",
-  //     attacker: ".",
-  //     defender: ".",
-  //     events: [],
-  //     score: [0, 0],
-  //     winner: ".",
-  //   });
+  const [gameData, setGameData] = useState({
+    player1: ".",
+    player2: ".",
+    misson: ".",
+    attacker: ".",
+    defender: ".",
+    events: [],
+    score: [0, 0],
+    winner: ".",
+  });
 
   // Button that changes a state which controls which component is displayed, settings or battle
-
+  const [gameToggle, setGameToggle] = useState<boolean>(false);
   const factionQuery = useFactions();
   return (
     <>
@@ -49,9 +48,26 @@ export const GameRoute = () => {
       {/* layout */}
       {console.log(factionQuery.data)}
       <div className="relative items-center h-screen bg-base">
+        <Button
+          className="absolute top-5 right-5"
+          onClick={() => setGameToggle(!gameToggle)}
+        />
         <h2 className="text-2xl font-bold text-center text-text m-[10vh]">
           Active Component
         </h2>
+        {gameToggle ? (
+          <BattleSettings
+            gameData={gameData}
+            setGameData={setGameData}
+            factionQuery={factionQuery}
+          />
+        ) : (
+          <Battle
+            gameData={gameData}
+            setGameData={setGameData}
+            factionQuery={factionQuery}
+          />
+        )}
       </div>
     </>
   );
