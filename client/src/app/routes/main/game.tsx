@@ -9,6 +9,9 @@ import { Head } from "@/components/seo/head";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 
+import { BattleSettings } from "@/features/prep/components/prep-game";
+import { Battle } from "@/features/battle/components/battle";
+
 // UNCOMMENT WHEN REACT QUERY IS NEEDED
 // import { queryConfig } from "@/lib/react-query";
 
@@ -28,16 +31,16 @@ export const gameLoader = (queryClient: QueryClient) => async () => {
 };
 
 export const GameRoute = () => {
-  const [gameData, setGameData] = useState({
-    player1: ".",
-    player2: ".",
-    misson: ".",
-    attacker: ".",
-    defender: ".",
-    events: [],
-    score: [0, 0],
-    winner: ".",
-  });
+  // const [gameData, setGameData] = useState({
+  //   player1: ".",
+  //   player2: ".",
+  //   misson: ".",
+  //   attacker: ".",
+  //   defender: ".",
+  //   events: [],
+  //   score: [0, 0],
+  //   winner: ".",
+  // });
 
   // Button that changes a state which controls which component is displayed, settings or battle
   const [gameToggle, setGameToggle] = useState<boolean>(false);
@@ -55,19 +58,7 @@ export const GameRoute = () => {
         <h2 className="text-2xl font-bold text-center text-text m-[10vh]">
           Active Component
         </h2>
-        {gameToggle ? (
-          <BattleSettings
-            gameData={gameData}
-            setGameData={setGameData}
-            factionQuery={factionQuery}
-          />
-        ) : (
-          <Battle
-            gameData={gameData}
-            setGameData={setGameData}
-            factionQuery={factionQuery}
-          />
-        )}
+        {gameToggle ? <BattleSettings /> : <Battle />}
       </div>
     </>
   );
