@@ -22,7 +22,7 @@ import { Battle } from "@/features/battle/components/battle";
 // Temporary loader function
 // Change this function to a getPreGameQueryOptions that encompasses all the queries needed for the game
 export const gameLoader = (queryClient: QueryClient) => async () => {
-  const gameQuery = getFactionsQueryOptions();
+  const gameQuery = getFactionsQueryOptions(player1, player2);
 
   return (
     queryClient.getQueryData(gameQuery.queryKey) ??
@@ -31,25 +31,25 @@ export const gameLoader = (queryClient: QueryClient) => async () => {
 };
 
 export const GameRoute = () => {
-  // const [gameData, setGameData] = useState({
-  //   player1: ".",
-  //   player2: ".",
-  //   misson: ".",
-  //   attacker: ".",
-  //   defender: ".",
-  //   events: [],
-  //   score: [0, 0],
-  //   winner: ".",
-  // });
+  const [gameData, setGameData] = useState({
+    player1: "",
+    player2: "",
+    misson: ".",
+    attacker: ".",
+    defender: ".",
+    events: [],
+    score: [0, 0],
+    winner: ".",
+  });
 
   // Button that changes a state which controls which component is displayed, settings or battle
   const [gameToggle, setGameToggle] = useState<boolean>(false);
-  const factionQuery = useFactions();
+  const factionQuery = useFactions(player1, player2);
   return (
     <>
       <Head title="Game" />
       {/* layout */}
-      {console.log(factionQuery.data)}
+      {(console.log(factionQuery.data), console.log(gameData))}
       <div className="relative items-center h-screen bg-base">
         <Button
           className="absolute top-5 right-5"
@@ -59,6 +59,7 @@ export const GameRoute = () => {
           Active Component
         </h2>
         {gameToggle ? <BattleSettings /> : <Battle />}
+        {/* Map through factions and list them all, let user click on faction name/image to select and set that faction to the player1/player2  */}
       </div>
     </>
   );
