@@ -22,6 +22,7 @@ import { Battle } from "@/features/battle/components/battle";
 // Temporary loader function
 // Change this function to a getPreGameQueryOptions that encompasses all the queries needed for the game
 export const gameLoader = (queryClient: QueryClient) => async () => {
+  // This should not run until the user has selected both their factions
   const gameQuery = getFactionsQueryOptions(player1, player2);
 
   return (
