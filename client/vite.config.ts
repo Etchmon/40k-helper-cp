@@ -21,4 +21,7 @@ export default defineConfig({
   //   },
   // },
   optimizeDeps: { exclude: ["fsevents"] },
+  build: {
+    sourcemap: true,
+  },
 });
