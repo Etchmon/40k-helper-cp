@@ -15,3 +15,10 @@ export const Default: Story = {
     variant: "default",
   },
 };
+
+export const Secondary: Story = {
+  args: {
+    children: "Button",
+    variant: "secondary",
+  }
+}
