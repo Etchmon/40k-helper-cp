@@ -8,7 +8,9 @@ const buttonVariants = cva(
       variant: {
         default: "bg-blue text-crust shadow hover:bg-blue/90",
         link: "text-primary underline-offset-4 hover:underline",
-        secondary: "bg-green text-crust shadow hover:bg-green/90"
+        secondary: "bg-green text-crust shadow hover:bg-green/90",
+        destructive: "bg-red text-crust shadow hover:bg-red/90",
+        yellow: "bg-yellow text-crust shadow hover:bg-yellow/90",
       },
       size: {
         default: "h-9 px-6 py-3",
