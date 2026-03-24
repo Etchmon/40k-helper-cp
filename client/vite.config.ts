@@ -11,14 +11,20 @@ export default defineConfig({
   server: {
     port: 3000,
   },
-  // test: {
-  //   globals: true,
-  //   environment: "jsdom",
-  //   setupFiles: "./src/testing/setup-tests.ts",
-  //   exclude: ["**/node_modules/**", "**/e2e/**"],
-  //   coverage: {
-  //     include: ["src/**"],
-  //   },
-  // },
   optimizeDeps: { exclude: ["fsevents"] },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // Vendor chunks for better caching
+          'vendor-react': ['react', 'react-dom', 'react-router-dom'],
+          'vendor-ui': ['lucide-react', 'class-variance-authority', 'tailwind-merge'],
+        },
+      },
+    },
+    // Target modern browsers for smaller bundles
+    target: 'es2020',
+    // Generate source maps for production debugging (optional - disable for smaller bundles)
+    sourcemap: false,
+  },
 });

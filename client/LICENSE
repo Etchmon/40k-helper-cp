@@ -1,0 +1,60 @@
+# MIT License
+
+Copyright (c) 2024 BattlePad Contributors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+## Third-Party Licenses
+
+### Wahapedia Data
+
+BattlePad includes game rules, stratagem, and unit data sourced from **Wahapedia** (https://wahapedia.ru/).
+
+Wahapedia is an open-source fan project providing comprehensive Warhammer 40k rules reference. The data is used under Wahapedia's open-source licensing terms.
+
+We gratefully acknowledge the Wahapedia team for their extensive work in making Warhammer 40k rules accessible to the community.
+
+**Wahapedia License**: The rules data from Wahapedia is used under its respective open-source license. Please visit https://wahapedia.ru/ for details.
+
+---
+
+## Warhammer 40k Trademark Notice
+
+"Warhammer 40,000", "Combat Patrol", "Space Marines", "Tyranids", "Orks", and all Games Workshop trademarks, logos, and distinctive names are property of **Games Workshop Limited**.
+
+BattlePad is a fan-created tool and is **not affiliated with, endorsed by, or supported by Games Workshop**. All content related to Warhammer 40k lore, rules, and imagery is used with acknowledgment of Games Workshop's intellectual property rights.
+
+For official Warhammer products and licensing, please visit [Games Workshop](https://www.games-workshop.com/).
+
+---
+
+## Dependencies
+
+This project uses the following open-source dependencies, each with their own licenses:
+
+- React (MIT)
+- TypeScript (Apache 2.0)
+- Vite (MIT)
+- Tailwind CSS (MIT)
+- Lucide React (ISC)
+- Catppuccin (MIT)
+
+See `package.json` for the complete list of dependencies and their versions.

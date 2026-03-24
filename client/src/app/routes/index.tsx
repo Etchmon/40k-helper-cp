@@ -1,12 +1,9 @@
-import { QueryClient } from "@tanstack/react-query";
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, redirect } from "react-router-dom";
 import { AppRoot } from "./main/root";
-
-import { gameLoader } from "./main/game";
 
 // protected routes
 
-export const createRouter = (queryClient: QueryClient) =>
+export const createRouter = () =>
   createBrowserRouter([
     {
       path: "/",
@@ -20,12 +17,29 @@ export const createRouter = (queryClient: QueryClient) =>
       element: <AppRoot />,
       children: [
         {
-          path: "/app/game",
+          path: "/app/game/setup",
           lazy: async () => {
-            const { GameRoute } = await import("./main/game");
-            return { Component: GameRoute };
+            const { SetupIndex } = await import("./main/setup");
+            return { Component: SetupIndex };
           },
-          loader: gameLoader(queryClient),
+        },
+        {
+          path: "/app/game/play",
+          lazy: async () => {
+            const { GameBoard } = await import("./main/play");
+            return { Component: GameBoard };
+          },
+        },
+        {
+          path: "/app/game/end",
+          lazy: async () => {
+            const { VictoryScreen } = await import("./main/end/victory-screen");
+            return { Component: VictoryScreen };
+          },
+        },
+        {
+          path: "/app/game",
+          loader: () => redirect("/app/game/setup"),
         },
       ],
     },

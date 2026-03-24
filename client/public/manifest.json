@@ -1,0 +1,21 @@
+{
+  "name": "BattlePad",
+  "short_name": "BattlePad",
+  "description": "Your digital battle companion for Warhammer 40k. Optimized for tablets. Track victory points, manage command points, navigate phases, and execute stratagems for any game size.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e1e2e",
+  "theme_color": "#1e1e2e",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["games", "entertainment"],
+  "lang": "en",
+  "dir": "ltr"
+}

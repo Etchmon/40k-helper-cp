@@ -1,14 +1,14 @@
-import { useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { RouterProvider } from "react-router-dom";
 
 import { AppProvider } from "./main-provider";
+import { GameProvider } from "@/lib/game/store";
+import { ToastProvider } from "@/components/ui/toast";
+import { ConfirmDialog } from "@/components/ui/confirm-dialog";
 import { createRouter } from "./routes";
 
 const AppRouter = () => {
-  const queryClient = useQueryClient();
-
-  const router = useMemo(() => createRouter(queryClient), [queryClient]);
+  const router = useMemo(() => createRouter(), []);
 
   return <RouterProvider router={router} />;
 };
@@ -16,7 +16,12 @@ const AppRouter = () => {
 function App() {
   return (
     <AppProvider>
-      <AppRouter />
+      <ToastProvider>
+        <GameProvider>
+          <AppRouter />
+          <ConfirmDialog />
+        </GameProvider>
+      </ToastProvider>
     </AppProvider>
   );
 }
