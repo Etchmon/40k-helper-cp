@@ -30,7 +30,7 @@ export interface ArmyBuildingRules {
 export const DEFAULT_RULES: ArmyBuildingRules = {
   minUnits: 1,
   maxUnits: 100,
-  requiresWarlord: true,
+  requiresWarlord: false,
   requiresBattleLine: false,
   maxEnhancements: 3,
 };
@@ -67,9 +67,11 @@ export function calculateArmyPoints(
 
   for (const armyUnit of units) {
     const unit = faction.units.find((u: Unit) => u.id === armyUnit.unitId);
-    if (unit) {
+    if (unit && unit.profiles && unit.profiles.length > 0) {
       const profile = unit.profiles[0];
-      total += profile.basePoints * armyUnit.quantity;
+      if (profile?.basePoints) {
+        total += profile.basePoints * armyUnit.quantity;
+      }
     }
   }
 

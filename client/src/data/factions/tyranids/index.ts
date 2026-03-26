@@ -13,7 +13,7 @@ const ABILITIES: Record<string, Ability> = {
   synapse: {
     id: 'synapse',
     name: 'Synapse',
-    description: 'TYRANID units within Synapse Range automatically pass Battle-shock tests.',
+    description: 'While a TYRANIDS unit is within 6" of a SYNAPSE model, it is within Synapse Range. While within Synapse Range: Battle-shock tests are taken on 3D6 instead of 2D6, and melee attacks gain +1 Strength.',
   },
   hyperAdaption: {
     id: 'hyper-adaption',
@@ -90,7 +90,7 @@ const ABILITIES: Record<string, Ability> = {
 const WEAPONS: Record<string, Weapon> = {
   // Ranged
   bioPlasma: {
-    id: 'bio-plasma',
+    id: 'bioPlasma',
     name: 'Bio-plasma',
     type: 'ranged',
     range: '12"',
@@ -113,7 +113,7 @@ const WEAPONS: Record<string, Weapon> = {
     keywords: ['SUSTAINED HITS'],
   },
   heavyVenomCannon: {
-    id: 'heavy-venom-cannon',
+    id: 'heavyVenomCannon',
     name: 'Heavy Venom Cannon',
     type: 'ranged',
     range: '24"',
@@ -125,7 +125,7 @@ const WEAPONS: Record<string, Weapon> = {
     keywords: ['BLAST'],
   },
   venomCannon: {
-    id: 'venom-cannon',
+    id: 'venomCannon',
     name: 'Venom Cannon',
     type: 'ranged',
     range: '24"',
@@ -160,7 +160,7 @@ const WEAPONS: Record<string, Weapon> = {
     damage: '1',
   },
   fleshHooks: {
-    id: 'flesh-hooks',
+    id: 'fleshHooks',
     name: 'Flesh Hooks',
     type: 'ranged',
     range: '6"',
@@ -171,7 +171,7 @@ const WEAPONS: Record<string, Weapon> = {
     damage: '1',
   },
   barbedGrapnel: {
-    id: 'barbed-grapnel',
+    id: 'barbedGrapnel',
     name: 'Barbed Grapnel',
     type: 'ranged',
     range: '18"',
@@ -182,7 +182,7 @@ const WEAPONS: Record<string, Weapon> = {
     damage: 'D3',
   },
   barbedScything: {
-    id: 'barbed-scything',
+    id: 'barbedScything',
     name: 'Barbed Scything',
     type: 'ranged',
     range: '12"',
@@ -228,7 +228,7 @@ const WEAPONS: Record<string, Weapon> = {
     damage: '1',
   },
   rendingClaws: {
-    id: 'rending-claws',
+    id: 'rendingClaws',
     name: 'Rending Claws',
     type: 'ranged',
     range: '6"',
@@ -240,7 +240,7 @@ const WEAPONS: Record<string, Weapon> = {
     keywords: ['DEVASTATING WOUNDS'],
   },
   venomSpur: {
-    id: 'venom-spur',
+    id: 'venomSpur',
     name: 'Venom Spur',
     type: 'ranged',
     range: '3"',
@@ -252,7 +252,7 @@ const WEAPONS: Record<string, Weapon> = {
     keywords: ['LETHAL HITS'],
   },
   bioMissile: {
-    id: 'bio-missile',
+    id: 'bioMissile',
     name: 'Bio-missile',
     type: 'ranged',
     range: '24"',
@@ -264,7 +264,7 @@ const WEAPONS: Record<string, Weapon> = {
     keywords: ['BLAST'],
   },
   heavyBioCannon: {
-    id: 'heavy-bio-cannon',
+    id: 'heavyBioCannon',
     name: 'Heavy Bio-cannon',
     type: 'ranged',
     range: '36"',
@@ -276,7 +276,7 @@ const WEAPONS: Record<string, Weapon> = {
     keywords: ['HEAVY', 'BLAST'],
   },
   bioCannon: {
-    id: 'bio-cannon',
+    id: 'bioCannon',
     name: 'Bio-cannon',
     type: 'ranged',
     range: '24"',
@@ -287,10 +287,58 @@ const WEAPONS: Record<string, Weapon> = {
     damage: '3',
     keywords: ['BLAST'],
   },
-  
+  psychic: {
+    id: 'psychic',
+    name: 'Psychic',
+    type: 'ranged',
+    range: '18"',
+    attacks: 'D6',
+    skill: '3+',
+    strength: '5',
+    armorPenetration: '-1',
+    damage: '1',
+    keywords: ['PSYCHIC', 'ANTIPSYKER'],
+  },
+  sporeMineLauncher: {
+    id: 'sporeMineLauncher',
+    name: 'Spore Mine Launcher',
+    type: 'ranged',
+    range: '18"',
+    attacks: 'D6',
+    skill: 'N/A',
+    strength: '3',
+    armorPenetration: '0',
+    damage: '1',
+    keywords: ['BLAST', 'IGNORES COVER'],
+  },
+  sporeMineBlast: {
+    id: 'sporeMineBlast',
+    name: 'Spore Mine Blast',
+    type: 'ranged',
+    range: '6"',
+    attacks: '1',
+    skill: 'N/A',
+    strength: '3',
+    armorPenetration: '0',
+    damage: '1',
+    keywords: ['AUTOHIT', 'BLAST'],
+  },
+  psychicScream: {
+    id: 'psychicScream',
+    name: 'Psychic Scream',
+    type: 'ranged',
+    range: '12"',
+    attacks: 'D6',
+    skill: '3+',
+    strength: '4',
+    armorPenetration: '-1',
+    damage: '1',
+    keywords: ['PSYCHIC'],
+  },
+
   // Melee
   monstrousScything: {
-    id: 'monstrous-scything',
+    id: 'monstrousScything',
     name: 'Monstrous Scything Talons',
     type: 'melee',
     attacks: '6',
@@ -300,7 +348,7 @@ const WEAPONS: Record<string, Weapon> = {
     damage: '2',
   },
   monstrousRending: {
-    id: 'monstrous-rending',
+    id: 'monstrousRending',
     name: 'Monstrous Rending Talons',
     type: 'melee',
     attacks: '6',
@@ -321,7 +369,7 @@ const WEAPONS: Record<string, Weapon> = {
     damage: '1',
   },
   rendingTalons: {
-    id: 'rending-talons',
+    id: 'rendingTalons',
     name: 'Rending Talons',
     type: 'melee',
     attacks: '3',
@@ -354,7 +402,7 @@ const WEAPONS: Record<string, Weapon> = {
     keywords: ['LETHAL HITS'],
   },
   lashWhip: {
-    id: 'lash-whip',
+    id: 'lashWhip',
     name: 'Lash Whip and Boneswords',
     type: 'melee',
     attacks: '6',
@@ -385,7 +433,7 @@ const WEAPONS: Record<string, Weapon> = {
     damage: '1',
   },
   bioWhip: {
-    id: 'bio-whip',
+    id: 'bioWhip',
     name: 'Bio-whip',
     type: 'melee',
     attacks: '5',
@@ -425,7 +473,7 @@ const WEAPONS: Record<string, Weapon> = {
     damage: '3',
   },
   massiveRending: {
-    id: 'massive-rending',
+    id: 'massiveRending',
     name: 'Massive Rending Talons',
     type: 'melee',
     attacks: '8',
@@ -436,7 +484,7 @@ const WEAPONS: Record<string, Weapon> = {
     keywords: ['DEVASTATING WOUNDS'],
   },
   massiveScything: {
-    id: 'massive-scything',
+    id: 'massiveScything',
     name: 'Massive Scything Talons',
     type: 'melee',
     attacks: '10',
@@ -446,7 +494,7 @@ const WEAPONS: Record<string, Weapon> = {
     damage: '3',
   },
   massiveCrushing: {
-    id: 'massive-crushing',
+    id: 'massiveCrushing',
     name: 'Massive Crushing Claws',
     type: 'melee',
     attacks: '6',
@@ -456,7 +504,7 @@ const WEAPONS: Record<string, Weapon> = {
     damage: '4',
   },
   boneswordLash: {
-    id: 'bonesword-lash',
+    id: 'boneswordLash',
     name: 'Lash Whip and Boneswords',
     type: 'melee',
     attacks: '6',
@@ -475,31 +523,52 @@ const WEAPONS: Record<string, Weapon> = {
 const UNITS: Unit[] = [
   // ==================== HQ ====================
   {
+    id: 'the-swarmlord',
+    name: 'The Swarmlord',
+    role: 'hq',
+    keywords: ['TYRANIDS', 'MONSTER', 'CHARACTER', 'EPIC HERO', 'SYNAPSE'],
+    profiles: [{
+      models: 1,
+      profile: { move: 8, toughness: 10, save: 2, wounds: 10, leadership: 8, oc: 4 },
+      basePoints: 250,
+    }],
+    weapons: [
+      { weaponId: 'boneswords', isDefault: true, cost: 0 },
+      { weaponId: 'monstrousScything', isDefault: true, cost: 0 },
+    ],
+    abilities: [
+      ABILITIES.synapse,
+      { id: 'will-of-hive-mind', name: 'Will of the Hive Mind', description: 'Each time you use a Stratagem, you can re-roll the result.' },
+      { id: 'onslaught-aura', name: 'Onslaught', description: 'While this model is on the battlefield, friendly TYRANID units within 6" have the Onslaught ability.' }
+    ],
+    notes: 'Warlord - re-roll Stratagem rolls',
+  },
+  {
     id: 'neurotyrant',
     name: 'Neurotyrant',
     role: 'hq',
     keywords: ['TYRANIDS', 'MONSTER', 'CHARACTER', 'PSYKER', 'SYNAPSE'],
     profiles: [{
       models: 1,
-      profile: { move: 8, toughness: 8, save: 4, wounds: 9, leadership: 6, oc: 3 },
-      basePoints: 125,
+      profile: { move: 6, toughness: 7, save: 4, wounds: 9, leadership: 6, oc: 3 },
+      basePoints: 115,
     }],
     weapons: [
-      { weaponId: 'neuro whip', isDefault: true, cost: 0 },
-      { weaponId: 'psychicScreech', isDefault: true, cost: 0 },
+      { weaponId: 'whip', isDefault: true, cost: 0 },
+      { weaponId: 'psychicScream', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.synapse, ABILITIES.shadowInTheWarp],
+    abilities: [ABILITIES.synapse, ABILITIES.shadowInTheWarp, { id: 'neuroloids', name: 'Neuroloids', description: 'Enemy units within 6" have -1 to Battle-shock tests.' }],
     notes: 'Warlord - grants Synapse to friendly units',
   },
   {
     id: 'hive-tyrant',
     name: 'Hive Tyrant',
     role: 'hq',
-    keywords: ['TYRANIDS', 'MONSTER', 'CHARACTER', 'FLY', 'SYNAPSE'],
+    keywords: ['TYRANIDS', 'MONSTER', 'CHARACTER', 'SYNAPSE'],
     profiles: [{
       models: 1,
-      profile: { move: 8, toughness: 10, save: 3, wounds: 12, leadership: 6, oc: 4 },
-      basePoints: 210,
+      profile: { move: 8, toughness: 10, save: 3, wounds: 10, leadership: 6, oc: 4 },
+      basePoints: 180,
     }],
     weapons: [
       { weaponId: 'monstrousScything', isDefault: true, cost: 0 },
@@ -510,14 +579,14 @@ const UNITS: Unit[] = [
     notes: 'Warlord - versatile synapse creature',
   },
   {
-    id: 'hive-tyrant-winged',
-    name: 'Hive Tyrant (Winged)',
+    id: 'winged-hive-tyrant',
+    name: 'Winged Hive Tyrant',
     role: 'hq',
-    keywords: ['TYRANIDS', 'MONSTER', 'CHARACTER', 'FLY', 'SYNAPSE'],
+    keywords: ['TYRANIDS', 'MONSTER', 'CHARACTER', 'FLY', 'SYNAPSE', 'VANGUARD INVADER'],
     profiles: [{
       models: 1,
-      profile: { move: 16, toughness: 10, save: 3, wounds: 12, leadership: 6, oc: 4 },
-      basePoints: 235,
+      profile: { move: 14, toughness: 10, save: 3, wounds: 10, leadership: 6, oc: 4 },
+      basePoints: 220,
     }],
     weapons: [
       { weaponId: 'monstrousScything', isDefault: true, cost: 0 },
@@ -546,6 +615,24 @@ const UNITS: Unit[] = [
     notes: 'Warlord - synapse for warriors',
   },
   {
+    id: 'winged-tyranid-prime',
+    name: 'Winged Tyranid Prime',
+    role: 'hq',
+    keywords: ['TYRANIDS', 'INFANTRY', 'CHARACTER', 'FLY', 'SYNAPSE'],
+    profiles: [{
+      models: 1,
+      profile: { move: 12, toughness: 5, save: 4, wounds: 5, leadership: 6, oc: 2 },
+      basePoints: 75,
+    }],
+    weapons: [
+      { weaponId: 'rendingTalons', isDefault: true, cost: 0 },
+      { weaponId: 'boneswords', isDefault: false, cost: 0 },
+      { weaponId: 'devourer', isDefault: false, cost: 0 },
+    ],
+    abilities: [ABILITIES.synapse],
+    notes: 'Fast synapse character',
+  },
+  {
     id: 'malanthrope',
     name: 'Malanthrope',
     role: 'hq',
@@ -569,7 +656,7 @@ const UNITS: Unit[] = [
     profiles: [{
       models: 1,
       profile: { move: 8, toughness: 10, save: 3, wounds: 12, leadership: 6, oc: 4 },
-      basePoints: 200,
+      basePoints: 140,
     }],
     weapons: [
       { weaponId: 'massiveRending', isDefault: true, cost: 0 },
@@ -582,15 +669,15 @@ const UNITS: Unit[] = [
     id: 'broodlord',
     name: 'Broodlord',
     role: 'hq',
-    keywords: ['TYRANIDS', 'INFANTRY', 'CHARACTER', 'SYNAPSE'],
+    keywords: ['TYRANIDS', 'INFANTRY', 'CHARACTER', 'SYNAPSE', 'VANGUARD INVADER'],
     profiles: [{
       models: 1,
       profile: { move: 8, toughness: 5, save: 4, wounds: 6, leadership: 6, oc: 2 },
-      basePoints: 80,
+      basePoints: 75,
     }],
     weapons: [
       { weaponId: 'boneswords', isDefault: true, cost: 0 },
-      { weaponId: 'lashiWhip', isDefault: false, cost: 0 },
+      { weaponId: 'lashWhip', isDefault: false, cost: 0 },
     ],
     abilities: [ABILITIES.synapse, ABILITIES.deepStrike],
     notes: 'Warlord - deep striking synapse',
@@ -599,11 +686,11 @@ const UNITS: Unit[] = [
     id: 'parasite-of-mortrex',
     name: 'Parasite of Mortrex',
     role: 'hq',
-    keywords: ['TYRANIDS', 'INFANTRY', 'CHARACTER', 'SYNAPSE'],
+    keywords: ['TYRANIDS', 'INFANTRY', 'CHARACTER', 'SYNAPSE', 'VANGUARD INVADER'],
     profiles: [{
       models: 1,
-      profile: { move: 8, toughness: 5, save: 4, wounds: 5, leadership: 6, oc: 2 },
-      basePoints: 85,
+      profile: { move: 12, toughness: 5, save: 4, wounds: 5, leadership: 6, oc: 2 },
+      basePoints: 75,
     }],
     weapons: [
       { weaponId: 'claws', isDefault: true, cost: 0 },
@@ -612,7 +699,28 @@ const UNITS: Unit[] = [
     notes: 'Warlord - control',
   },
   {
-    id: 'exocrine',
+    id: 'tervigon',
+    name: 'Tervigon',
+    role: 'hq',
+    keywords: ['TYRANIDS', 'MONSTER', 'CHARACTER', 'SYNAPSE'],
+    profiles: [{
+      models: 1,
+      profile: { move: 8, toughness: 12, save: 2, wounds: 16, leadership: 6, oc: 5 },
+      basePoints: 200,
+    }],
+    weapons: [
+      { weaponId: 'massiveCrushing', isDefault: true, cost: 0 },
+      { weaponId: 'thrashing', isDefault: true, cost: 0 },
+      { weaponId: 'bioCannon', isDefault: true, cost: 0 },
+    ],
+    abilities: [
+      ABILITIES.synapse,
+      { id: 'spawning', name: 'Spawning', description: 'Once per battle, at the end of your Movement phase, you can set up one Termagant unit of up to 20 models within 6" of this model.' }
+    ],
+    notes: 'Spawns Termagants',
+  },
+  {
+    id: 'exocrine-hq',
     name: 'Exocrine',
     role: 'hq',
     keywords: ['TYRANIDS', 'MONSTER'],
@@ -629,7 +737,7 @@ const UNITS: Unit[] = [
     notes: 'Heavy shooting platform',
   },
   {
-    id: 'haruspex',
+    id: 'haruspex-hq',
     name: 'Haruspex',
     role: 'hq',
     keywords: ['TYRANIDS', 'MONSTER'],
@@ -651,7 +759,7 @@ const UNITS: Unit[] = [
     id: 'termagants',
     name: 'Termagants',
     role: 'troops',
-    keywords: ['TYRANIDS', 'INFANTRY'],
+    keywords: ['TYRANIDS', 'INFANTRY', 'BATTLELINE', 'ENDLESS MULTITUDE', 'GREAT DEVOURER'],
     profiles: [
       {
         models: 10,
@@ -676,17 +784,17 @@ const UNITS: Unit[] = [
     id: 'hormagaunts',
     name: 'Hormagaunts',
     role: 'troops',
-    keywords: ['TYRANIDS', 'INFANTRY'],
+    keywords: ['TYRANIDS', 'INFANTRY', 'BATTLELINE', 'ENDLESS MULTITUDE', 'GREAT DEVOURER'],
     profiles: [
       {
         models: 10,
-        profile: { move: 10, toughness: 3, save: 6, wounds: 1, leadership: 5, oc: 1 },
-        basePoints: 65,
+        profile: { move: 8, toughness: 4, save: 6, wounds: 1, leadership: 5, oc: 1 },
+        basePoints: 70,
       },
       {
         models: 20,
-        profile: { move: 10, toughness: 3, save: 6, wounds: 1, leadership: 5, oc: 1 },
-        basePoints: 130,
+        profile: { move: 8, toughness: 4, save: 6, wounds: 1, leadership: 5, oc: 1 },
+        basePoints: 140,
       },
     ],
     weapons: [
@@ -699,17 +807,17 @@ const UNITS: Unit[] = [
     id: 'gargoyles',
     name: 'Gargoyles',
     role: 'troops',
-    keywords: ['TYRANIDS', 'INFANTRY', 'FLY'],
+    keywords: ['TYRANIDS', 'INFANTRY', 'FLY', 'BATTLELINE', 'ENDLESS MULTITUDE', 'VANGUARD INVADER', 'GREAT DEVOURER'],
     profiles: [
       {
         models: 10,
-        profile: { move: 12, toughness: 3, save: 6, wounds: 1, leadership: 5, oc: 1 },
-        basePoints: 70,
+        profile: { move: 8, toughness: 4, save: 6, wounds: 1, leadership: 5, oc: 1 },
+        basePoints: 75,
       },
       {
         models: 20,
-        profile: { move: 12, toughness: 3, save: 6, wounds: 1, leadership: 5, oc: 1 },
-        basePoints: 140,
+        profile: { move: 8, toughness: 4, save: 6, wounds: 1, leadership: 5, oc: 1 },
+        basePoints: 150,
       },
     ],
     weapons: [
@@ -787,7 +895,7 @@ const UNITS: Unit[] = [
 
   // ==================== ELITES ====================
   {
-    id: 'zoanthropes',
+    id: 'zoanthropes-elites',
     name: 'Zoanthropes',
     role: 'elites',
     keywords: ['TYRANIDS', 'PSYKER', 'SYNAPSE'],
@@ -823,18 +931,18 @@ const UNITS: Unit[] = [
     id: 'deathleaper',
     name: 'Deathleaper',
     role: 'elites',
-    keywords: ['TYRANIDS', 'INFANTRY', 'CHARACTER', 'EPIC HERO'],
+    keywords: ['TYRANIDS', 'INFANTRY', 'CHARACTER', 'EPIC HERO', 'VANGUARD INVADER'],
     profiles: [{
       models: 1,
-      profile: { move: 10, toughness: 5, save: 5, wounds: 5, leadership: 6, oc: 2 },
+      profile: { move: 14, toughness: 5, save: 5, wounds: 4, leadership: 6, oc: 2 },
       basePoints: 80,
     }],
     weapons: [
       { weaponId: 'rendingTalons', isDefault: true, cost: 0 },
-      { weaponId: 'lashing', isDefault: true, cost: 0 },
+      { weaponId: 'lashWhip', isDefault: true, cost: 0 },
     ],
     abilities: [ABILITIES.feelsNoPain, ABILITIES.deepStrike, ABILITIES.loneOperative],
-    notes: 'Elite assassin',
+    notes: 'Elite assassin - VANGUARD INVADER',
   },
   {
     id: 'lictor',
@@ -848,7 +956,7 @@ const UNITS: Unit[] = [
     }],
     weapons: [
       { weaponId: 'rendingTalons', isDefault: true, cost: 0 },
-      { weaponId: 'lashing', isDefault: true, cost: 0 },
+      { weaponId: 'lashWhip', isDefault: true, cost: 0 },
     ],
     abilities: [ABILITIES.feelsNoPain, ABILITIES.deepStrike, ABILITIES.loneOperative],
     notes: 'Recon specialist',
@@ -921,7 +1029,7 @@ const UNITS: Unit[] = [
     notes: 'Spore mine deployment',
   },
   {
-    id: 'exocrine',
+    id: 'exocrine-elites',
     name: 'Exocrine',
     role: 'elites',
     keywords: ['TYRANIDS', 'MONSTER'],
@@ -1038,7 +1146,7 @@ const UNITS: Unit[] = [
     }],
     weapons: [
       { weaponId: 'boneswords', isDefault: true, cost: 0 },
-      { weaponId: 'lashiWhip', isDefault: false, cost: 0 },
+      { weaponId: 'lashWhip', isDefault: false, cost: 0 },
     ],
     abilities: [ABILITIES.synapse],
     notes: 'Melee warriors',
@@ -1080,7 +1188,7 @@ const UNITS: Unit[] = [
 
   // ==================== FAST ATTACK ====================
   {
-    id: 'gargoyles',
+    id: 'gargoyles-fast-attack',
     name: 'Gargoyles',
     role: 'fast-attack',
     keywords: ['TYRANIDS', 'INFANTRY', 'FLY'],
@@ -1401,7 +1509,7 @@ const UNITS: Unit[] = [
     }],
     weapons: [
       { weaponId: 'spikeRifle', isDefault: true, cost: 0 },
-      { weaponId: 'lashing', isDefault: false, cost: 0 },
+      { weaponId: 'lashWhip', isDefault: false, cost: 0 },
     ],
     abilities: [],
     notes: 'Broodmother',
@@ -1425,8 +1533,8 @@ const UNITS: Unit[] = [
 
   // ==================== FLYERS ====================
   {
-    id: 'harpy',
-    name: 'Harpy',
+    id: 'mucanoi-flyer',
+    name: 'Mucanoi',
     role: 'flyer',
     keywords: ['TYRANIDS', 'MONSTER', 'FLY'],
     profiles: [{

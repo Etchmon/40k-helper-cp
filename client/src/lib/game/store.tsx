@@ -89,6 +89,7 @@ const initialBattleState: BattleState = {
     gainedThisRound: [0, 0],
   },
   selectedUnitId: null,
+  lastCpGainKey: '',
 };
 
 const emptyPlayerSetup = (): PlayerSetup => ({
@@ -132,7 +133,7 @@ type GameActionType =
   | { type: 'ADD_UNIT'; payload: { player: 1 | 2; unit: ArmyUnit } }
   | { type: 'REMOVE_UNIT'; payload: { player: 1 | 2; unitId: string } }
   | { type: 'UPDATE_UNIT_QUANTITY'; payload: { player: 1 | 2; unitId: string; quantity: number } }
-  | { type: 'SET_WARLORD'; payload: { player: 1 | 2; warlordId: string } }
+  | { type: 'SET_WARLORD'; payload: { player: 1 | 2; warlordId: string | null } }
   | { type: 'ADD_ENHANCEMENT'; payload: { player: 1 | 2; enhancementId: string } }
   | { type: 'REMOVE_ENHANCEMENT'; payload: { player: 1 | 2; enhancementId: string } }
   | { type: 'SET_TEMPLAR_VOW'; payload: { player: 1 | 2; vowId: string } }
@@ -152,6 +153,7 @@ type GameActionType =
   | { type: 'SPEND_CP'; payload: { player: 1 | 2; amount: number; reason: string } }
   | { type: 'GAIN_CP'; payload: { player: 1 | 2; amount: number; reason: string } }
   | { type: 'AUTO_GAIN_COMMAND_PHASE_CP'; payload: { player: 1 | 2 } }
+  | { type: 'SET_LAST_CP_GAIN_KEY'; payload: { key: string } }
   | { type: 'SELECT_UNIT'; payload: { unitId: string | null } };
 
 // ============================================
@@ -181,7 +183,9 @@ function gameReducer(state: GameState, action: GameActionType): GameState {
     case 'SET_PLAYER_NAME': {
       const playerIndex = getPlayerIndex(action.payload.player);
       const newPlayers = clonePlayers(state.players);
-      newPlayers[playerIndex] = { ...newPlayers[playerIndex], name: action.payload.name };
+      // Sanitize name: trim whitespace and limit to 50 characters
+      const sanitizedName = action.payload.name.trim().slice(0, 50);
+      newPlayers[playerIndex] = { ...newPlayers[playerIndex], name: sanitizedName };
       return { ...state, players: newPlayers };
     }
 
@@ -357,14 +361,16 @@ function gameReducer(state: GameState, action: GameActionType): GameState {
               : null,
         };
       }
+      // Alternate starting player: player who went second in current round goes first in next round
+      const nextStarter = state.turn.activePlayer === 1 ? 2 : 1;
       return {
         ...state,
         turn: {
           ...state.turn,
           round: (state.turn.round + 1) as 1 | 2 | 3 | 4 | 5,
           phase: 'command',
-          activePlayer: 1,
-          isPlayer1Turn: true,
+          activePlayer: nextStarter,
+          isPlayer1Turn: nextStarter === 1,
         },
         battle: {
           ...state.battle,
@@ -488,6 +494,10 @@ function gameReducer(state: GameState, action: GameActionType): GameState {
 
     case 'GAIN_CP': {
       const playerIndex = getPlayerIndex(action.payload.player);
+      const currentGained = state.battle.commandPoints.gainedThisRound[playerIndex];
+      if (currentGained >= 1) {
+        return state;
+      }
       const newCP: [number, number] = [...state.battle.commandPoints.current];
       newCP[playerIndex] += action.payload.amount;
       const newGained: [number, number] = [...state.battle.commandPoints.gainedThisRound];
@@ -507,8 +517,16 @@ function gameReducer(state: GameState, action: GameActionType): GameState {
 
     case 'AUTO_GAIN_COMMAND_PHASE_CP': {
       const playerIndex = getPlayerIndex(action.payload.player);
+      const currentGained = state.battle.commandPoints.gainedThisRound[playerIndex];
+      
+      // Check if already reached the cap for "other sources" this round (not including command phase auto-gain)
+      // The command phase auto-gain is separate from the "other sources" cap
       const newCP: [number, number] = [...state.battle.commandPoints.current];
+      const newGained: [number, number] = [...state.battle.commandPoints.gainedThisRound];
+      
       newCP[playerIndex] += 1;
+      newGained[playerIndex] += 1; // Track command phase CP gain
+      
       return {
         ...state,
         battle: {
@@ -516,10 +534,20 @@ function gameReducer(state: GameState, action: GameActionType): GameState {
           commandPoints: {
             ...state.battle.commandPoints,
             current: newCP,
+            gainedThisRound: newGained,
           },
         },
       };
     }
+
+    case 'SET_LAST_CP_GAIN_KEY':
+      return {
+        ...state,
+        battle: {
+          ...state.battle,
+          lastCpGainKey: action.payload.key,
+        },
+      };
 
     case 'SELECT_UNIT':
       return {
@@ -533,6 +561,42 @@ function gameReducer(state: GameState, action: GameActionType): GameState {
     default:
       return state;
   }
+}
+
+// ============================================
+// LOCAL STORAGE VALIDATION
+// ============================================
+
+function isValidGameState(obj: unknown): obj is GameState {
+  if (!obj || typeof obj !== 'object') return false;
+  const state = obj as Record<string, unknown>;
+  
+  // Check required top-level properties
+  if (typeof state.id !== 'string') return false;
+  if (!['setup', 'playing', 'finished'].includes(state.status as string)) return false;
+  if (!Array.isArray(state.players) || state.players.length !== 2) return false;
+  
+  // Check players structure
+  for (const player of state.players as unknown[]) {
+    if (!player || typeof player !== 'object') return false;
+    const p = player as Record<string, unknown>;
+    if (typeof p.name !== 'string') return false;
+    if (p.factionId !== null && typeof p.factionId !== 'string') return false;
+    if (!Array.isArray(p.army)) return false;
+  }
+  
+  // Check turn structure
+  if (!state.turn || typeof state.turn !== 'object') return false;
+  const turn = state.turn as Record<string, unknown>;
+  if (typeof turn.round !== 'number' || turn.round < 1 || turn.round > 5) return false;
+  if (!['command', 'movement', 'shooting', 'charge', 'fight'].includes(turn.phase as string)) return false;
+  
+  // Check battle structure  
+  if (!state.battle || typeof state.battle !== 'object') return false;
+  const battle = state.battle as Record<string, unknown>;
+  if (!Array.isArray(battle.victoryPoints) || battle.victoryPoints.length !== 2) return false;
+  
+  return true;
 }
 
 // ============================================
@@ -554,14 +618,19 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(gameReducer, initialGameState);
   const [hasSavedGame, setHasSavedGame] = React.useState(false);
 
-  // Load saved game on mount
+  // Load saved game on mount - with validation
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       try {
-        const parsed = JSON.parse(saved) as GameState;
-        dispatch({ type: 'LOAD_GAME', payload: parsed });
-        setHasSavedGame(true);
+        const parsed = JSON.parse(saved);
+        if (isValidGameState(parsed)) {
+          dispatch({ type: 'LOAD_GAME', payload: parsed });
+          setHasSavedGame(true);
+        } else {
+          console.warn('Invalid game state in storage, clearing...');
+          localStorage.removeItem(STORAGE_KEY);
+        }
       } catch (e) {
         console.error('Failed to load saved game:', e);
       }

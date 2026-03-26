@@ -1,6 +1,38 @@
-import { Faction, Detachment } from '../../../../types/game';
+import { Faction, Unit, Detachment } from '../../../../types/game';
 import { SHARED_UNITS } from '../shared/units';
 import { GENERIC_DETACHMENTS } from '../detachments/generic';
+
+const IRON_HANDS_UNIQUE_UNITS: Unit[] = [
+  {
+    id: 'iron-father-feirros',
+    name: 'Iron Father Feirros',
+    role: 'hq',
+    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'IRON HANDS', 'INFANTRY', 'CHARACTER', 'TECHMARINE', 'EPIC HERO'],
+    profiles: [{
+      models: 1,
+      profile: { move: 5, toughness: 6, save: 2, wounds: 6, leadership: 6, oc: 1 },
+      basePoints: 95,
+    }],
+    weapons: [
+      { weaponId: 'boltPistol', isDefault: true, cost: 0 },
+      { weaponId: 'ironHammer', isDefault: true, cost: 0 },
+      { weaponId: 'heavyFlamer', isDefault: false, cost: 0 },
+    ],
+    abilities: [
+      {
+        id: 'rites-of-tempering',
+        name: 'Rites of Tempering',
+        description: 'While this model is within 6" of friendly IRON HANDS units, each of those units has the Feel No Pain 5+ ability.',
+      },
+      {
+        id: 'master-of-the-forge',
+        name: 'Master of the Forge',
+        description: 'At the start of your Command phase, select one friendly IRON HANDS VEHICLE or MONSTER unit within 6". That unit regains 1 lost wound.',
+      },
+    ],
+    notes: 'Techmarine with mechanised aura',
+  },
+];
 
 const IRON_HANDS_DETACHMENTS: Detachment[] = [
   {
@@ -65,8 +97,8 @@ export const ironHands: Faction = {
     type: 'oath-of-moment',
     oathOfMoment: { rerollHits: true, bonusToWound: true }
   },
-  units: [...SHARED_UNITS],
+  units: [...SHARED_UNITS, ...IRON_HANDS_UNIQUE_UNITS],
   detachments: [...GENERIC_DETACHMENTS, ...IRON_HANDS_DETACHMENTS],
-  uniqueUnits: [],
+  uniqueUnits: [...IRON_HANDS_UNIQUE_UNITS],
   uniqueDetachments: [...IRON_HANDS_DETACHMENTS],
 };

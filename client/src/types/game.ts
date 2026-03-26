@@ -187,6 +187,7 @@ export interface UnitProfile {
     wounds: number;
     leadership: number;
     oc: number;
+    invulnerable?: number;
   };
   basePoints: number;
 }
@@ -486,6 +487,7 @@ export interface BattleState {
   secondariesScored: [number, number];
   commandPoints: CommandPointsState;
   selectedUnitId: string | null;
+  lastCpGainKey: string;
 }
 
 export interface GameAction {

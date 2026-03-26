@@ -68,14 +68,14 @@ export function FactionSelectStep({ currentPlayer, onNext, onBack }: FactionSele
       )}
 
       <Card>
-        <CardHeader>
-          <CardTitle>Space Marines</CardTitle>
-          <CardDescription>
+        <CardHeader className="px-4 py-3 md:py-4">
+          <CardTitle className="text-lg md:text-xl">Space Marines</CardTitle>
+          <CardDescription className="text-sm">
             Choose your Chapter. Each has unique units, abilities, and chapter-specific detachments.
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+        <CardContent className="px-2 md:px-4 pb-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 md:gap-3">
             {spaceMarineChapters.map((faction) => (
               <FactionCard
                 key={faction.id}
@@ -88,7 +88,7 @@ export function FactionSelectStep({ currentPlayer, onNext, onBack }: FactionSele
         </CardContent>
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
         {otherFactions.map((faction) => (
           <FactionCard
             key={faction.id}

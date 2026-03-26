@@ -5,10 +5,11 @@ import { Faction, Unit, Weapon, Ability, Detachment } from '../../../types/game'
 // ============================================
 
 const ABILITIES: Record<string, Ability> = {
+  // NOTE: Kultur was removed in 10th edition - kept for reference but no longer applies
   kultur: {
     id: 'kultur',
-    name: 'Kultur',
-    description: 'Orks automatically pass Battle-shock tests.',
+    name: 'Kultur (9th Ed.)',
+    description: 'Removed in 10th edition - Orks no longer automatically pass Battle-shock tests.',
   },
   daKilla: {
     id: 'da-killa',
@@ -23,7 +24,7 @@ const ABILITIES: Record<string, Ability> = {
   dakka: {
     id: 'dakka',
     name: 'Dakka',
-    description: 'When a model shoots, it makes a number of attacks equal to its Attacks characteristic.',
+    description: 'Dakka weapons have two attack profiles: one for shooting at any range, and one for shooting at half range or less (more shots at close range).',
   },
   speed: {
     id: 'speed',
@@ -48,7 +49,7 @@ const ABILITIES: Record<string, Ability> = {
   waaagh: {
     id: 'waaagh',
     name: 'Waaagh!',
-    description: 'In your Command phase, you can call a WAAAGH! All ORKS units get +1 to hit until next Command phase.',
+    description: 'Once per battle, at the start of your Command phase, you can call a Waaagh! Until the start of your next Command phase: ORKS units are eligible to charge in a turn in which they Advanced; melee weapons gain +1 Strength and +1 Attacks; ORKS models have a 5+ invulnerable save.',
   },
   feelsNoPain: {
     id: 'feels-no-pain',
@@ -336,7 +337,7 @@ const UNITS: Unit[] = [
       { weaponId: 'bigChoppa', isDefault: true, cost: 0 },
       { weaponId: 'kombiWeapon', isDefault: false, cost: 5 },
     ],
-    abilities: [ABILITIES.waaagh, ABILITIES.kultur],
+    abilities: [ABILITIES.waaagh],
     notes: 'Warlord - grants +1 Leadership to ORKS within 6"',
   },
   {
@@ -353,7 +354,7 @@ const UNITS: Unit[] = [
       { weaponId: 'bigChoppa', isDefault: true, cost: 0 },
       { weaponId: 'killkannon', isDefault: false, cost: 5 },
     ],
-    abilities: [ABILITIES.waaagh, ABILITIES.kultur, ABILITIES.feelsNoPain],
+    abilities: [ABILITIES.waaagh, ABILITIES.feelsNoPain],
     notes: 'Warlord - heavy armor',
   },
   {
@@ -370,7 +371,7 @@ const UNITS: Unit[] = [
       { weaponId: 'bigChoppa', isDefault: true, cost: 0 },
       { weaponId: 'kustomBlast', isDefault: false, cost: 10 },
     ],
-    abilities: [ABILITIES.waaagh, ABILITIES.kultur],
+    abilities: [ABILITIES.waaagh],
     notes: 'Warlord - kustom jobs',
   },
   {
@@ -387,7 +388,7 @@ const UNITS: Unit[] = [
       { weaponId: 'bigChoppa', isDefault: true, cost: 0 },
       { weaponId: 'shokkAttack', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.waaagh, ABILITIES.kultur],
+    abilities: [ABILITIES.waaagh],
     notes: 'Warlord - teleport damage',
   },
   {
@@ -404,7 +405,7 @@ const UNITS: Unit[] = [
       { weaponId: 'choppa', isDefault: true, cost: 0 },
       { weaponId: 'weirdGrip', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.waaagh, ABILITIES.kultur],
+    abilities: [ABILITIES.waaagh],
     notes: 'Warlord - psychic',
   },
   {
@@ -421,7 +422,7 @@ const UNITS: Unit[] = [
       { weaponId: 'choppa', isDefault: true, cost: 0 },
       { weaponId: 'docta', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.waaagh, ABILITIES.kultur],
+    abilities: [ABILITIES.waaagh],
     notes: 'Warlord - can heal',
   },
   {
@@ -438,25 +439,24 @@ const UNITS: Unit[] = [
       { weaponId: 'bigChoppa', isDefault: true, cost: 0 },
       { weaponId: 'kustomBlast', isDefault: false, cost: 10 },
     ],
-    abilities: [ABILITIES.waaagh, ABILITIES.kultur],
+    abilities: [ABILITIES.waaagh],
     notes: 'Warlord - kustom work',
   },
   {
-    id: 'ghazgkull',
-    name: 'Ghazgkull Thraka',
+    id: 'ghazghkull',
+    name: 'Ghazghkull Thraka',
     role: 'hq',
     keywords: ['ORKS', 'INFANTRY', 'CHARACTER', 'EPIC HERO', 'WARBOSS'],
     profiles: [{
       models: 1,
-      profile: { move: 6, toughness: 6, save: 3, wounds: 9, leadership: 8, oc: 3 },
-      basePoints: 165,
+      profile: { move: 6, toughness: 6, save: 2, wounds: 10, leadership: 8, oc: 3 },
+      basePoints: 235,
     }],
     weapons: [
       { weaponId: 'powerKlaw', isDefault: true, cost: 0 },
-      { weaponId: 'MekArray', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.waaagh, ABILITIES.kultur, ABILITIES.feelsNoPain],
-    notes: 'Warlord - unique character',
+    abilities: [ABILITIES.waaagh, ABILITIES.feelsNoPain],
+    notes: 'Warlord - includes Makari, 4+ invulnerable save',
   },
   {
     id: 'makari',
@@ -471,8 +471,58 @@ const UNITS: Unit[] = [
     weapons: [
       { weaponId: 'grotKnives', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.waaagh, ABILITIES.kultur],
+    abilities: [ABILITIES.waaagh],
     notes: 'Buffs nearby Warboss',
+  },
+  {
+    id: 'zodgrod-wortsnagga',
+    name: 'Zodgrod Wortsnagga',
+    role: 'hq',
+    keywords: ['ORKS', 'INFANTRY', 'CHARACTER', 'EPIC HERO'],
+    profiles: [{
+      models: 1,
+      profile: { move: 6, toughness: 5, save: 4, wounds: 5, leadership: 7, oc: 2 },
+      basePoints: 90,
+    }],
+    weapons: [
+      { weaponId: 'choppa', isDefault: true, cost: 0 },
+      { weaponId: 'slugga', isDefault: true, cost: 0 },
+    ],
+    abilities: [ABILITIES.waaagh, { id: 'super-runts', name: 'Super Runts', description: 'Gretchin in his unit have a 4+ save and gain Lone Operative.' }, { id: 'special-dose', name: 'Special Dose', description: 'Gretchin in his unit have Feel No Pain 5+.' }],
+    notes: 'Warlord - buffs Gretchin',
+  },
+  {
+    id: 'snikrot',
+    name: 'Boss Snikrot',
+    role: 'hq',
+    keywords: ['ORKS', 'INFANTRY', 'CHARACTER', 'EPIC HERO'],
+    profiles: [{
+      models: 1,
+      profile: { move: 6, toughness: 5, save: 5, wounds: 5, leadership: 7, oc: 2 },
+      basePoints: 75,
+    }],
+    weapons: [
+      { weaponId: 'choppa', isDefault: true, cost: 0 },
+      { weaponId: 'slugga', isDefault: true, cost: 0 },
+    ],
+    abilities: [ABILITIES.waaagh, { id: 'sneaky', name: 'Sneaky Gits', description: 'Can be set up in Reserves and deep strikes. Enemy units cannot target with ranged attacks unless within 12".' }],
+    notes: 'Warlord - deep striking assassin',
+  },
+  {
+    id: 'mozrog-skragbad',
+    name: 'Mozrog Skragbad',
+    role: 'hq',
+    keywords: ['ORKS', 'CAVALRY', 'CHARACTER', 'EPIC HERO'],
+    profiles: [{
+      models: 1,
+      profile: { move: 10, toughness: 8, save: 3, wounds: 8, leadership: 7, oc: 3 },
+      basePoints: 110,
+    }],
+    weapons: [
+      { weaponId: 'bossSaws', isDefault: true, cost: 0 },
+    ],
+    abilities: [ABILITIES.waaagh, { id: 'big-scrapper', name: 'Big Scrapper', description: 'Feel No Pain 4+.' }],
+    notes: 'Warlord - fast character with 4+ Feel No Pain',
   },
   {
     id: 'mozrog-skorgga',
@@ -488,7 +538,7 @@ const UNITS: Unit[] = [
       { weaponId: 'bossSaws', isDefault: true, cost: 0 },
       { weaponId: 'thumpGun', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.waaagh, ABILITIES.kultur],
+    abilities: [ABILITIES.waaagh],
     notes: 'Warlord - fast character',
   },
   {
@@ -505,7 +555,7 @@ const UNITS: Unit[] = [
       { weaponId: 'bigChoppa', isDefault: true, cost: 0 },
       { weaponId: 'kombiWeapon', isDefault: false, cost: 5 },
     ],
-    abilities: [ABILITIES.waaagh, ABILITIES.kultur],
+    abilities: [ABILITIES.waaagh],
     notes: 'Warlord',
   },
   {
@@ -522,7 +572,7 @@ const UNITS: Unit[] = [
       { weaponId: 'bossSaws', isDefault: true, cost: 0 },
       { weaponId: 'beastpistol', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.waaagh, ABILITIES.kultur],
+    abilities: [ABILITIES.waaagh],
     notes: 'Warlord - on squigosaurus',
   },
   {
@@ -539,7 +589,7 @@ const UNITS: Unit[] = [
       { weaponId: 'bossSaws', isDefault: true, cost: 0 },
       { weaponId: 'beastpistol', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.waaagh, ABILITIES.kultur],
+    abilities: [ABILITIES.waaagh],
     notes: 'Warlord - on Squigosaurus',
   },
 
@@ -548,22 +598,17 @@ const UNITS: Unit[] = [
     id: 'boyz',
     name: 'Boyz',
     role: 'troops',
-    keywords: ['ORKS', 'INFANTRY', 'BOYZ'],
+    keywords: ['ORKS', 'INFANTRY', 'BATTLELINE', 'BOYZ'],
     profiles: [
       {
         models: 10,
-        profile: { move: 6, toughness: 4, save: 6, wounds: 1, leadership: 7, oc: 1 },
-        basePoints: 90,
+        profile: { move: 5, toughness: 5, save: 6, wounds: 1, leadership: 7, oc: 1 },
+        basePoints: 80,
       },
       {
         models: 20,
-        profile: { move: 6, toughness: 4, save: 6, wounds: 1, leadership: 7, oc: 1 },
-        basePoints: 180,
-      },
-      {
-        models: 30,
-        profile: { move: 6, toughness: 4, save: 6, wounds: 1, leadership: 7, oc: 1 },
-        basePoints: 270,
+        profile: { move: 5, toughness: 5, save: 6, wounds: 1, leadership: 7, oc: 1 },
+        basePoints: 160,
       },
     ],
     weapons: [
@@ -571,31 +616,38 @@ const UNITS: Unit[] = [
       { weaponId: 'slugga', isDefault: true, cost: 0 },
       { weaponId: 'shoota', isDefault: false, cost: 0 },
     ],
-    abilities: [ABILITIES.daKilla, ABILITIES.kultur],
+    abilities: [ABILITIES.daKilla],
     notes: 'BATTLELINE - core infantry',
   },
   {
     id: 'gretchin',
     name: 'Gretchin',
     role: 'troops',
-    keywords: ['ORKS', 'INFANTRY', 'GRETS'],
-    profiles: [{
-      models: 10,
-      profile: { move: 6, toughness: 2, save: 7, wounds: 1, leadership: 5, oc: 0 },
-      basePoints: 40,
-    }],
+    keywords: ['ORKS', 'INFANTRY', 'BATTLELINE', 'GRETS'],
+    profiles: [
+      {
+        models: 10,
+        profile: { move: 6, toughness: 2, save: 6, wounds: 1, leadership: 5, oc: 0 },
+        basePoints: 40,
+      },
+      {
+        models: 20,
+        profile: { move: 6, toughness: 2, save: 6, wounds: 1, leadership: 5, oc: 0 },
+        basePoints: 80,
+      },
+    ],
     weapons: [
       { weaponId: 'grotRig', isDefault: true, cost: 0 },
       { weaponId: 'grotKnives', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.grots, ABILITIES.kultur],
+    abilities: [ABILITIES.grots],
     notes: 'BATTLELINE - cheap screening',
   },
   {
     id: 'stormboyz',
     name: 'Stormboyz',
     role: 'troops',
-    keywords: ['ORKS', 'INFANTRY', 'FLY'],
+    keywords: ['ORKS', 'INFANTRY', 'FLY', 'BATTLELINE'],
     profiles: [
       {
         models: 5,
@@ -612,41 +664,65 @@ const UNITS: Unit[] = [
       { weaponId: 'choppa', isDefault: true, cost: 0 },
       { weaponId: 'slugga', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'BATTLELINE - fast troops',
+  },
+  {
+    id: 'beast-snagga-boyz',
+    name: 'Beast Snagga Boyz',
+    role: 'troops',
+    keywords: ['ORKS', 'INFANTRY', 'BATTLELINE', 'BEAST SNAGGA'],
+    profiles: [
+      {
+        models: 10,
+        profile: { move: 5, toughness: 6, save: 5, wounds: 1, leadership: 7, oc: 1 },
+        basePoints: 95,
+      },
+      {
+        models: 20,
+        profile: { move: 5, toughness: 6, save: 5, wounds: 1, leadership: 7, oc: 1 },
+        basePoints: 190,
+      },
+    ],
+    weapons: [
+      { weaponId: 'choppa', isDefault: true, cost: 0 },
+      { weaponId: 'slugga', isDefault: true, cost: 0 },
+    ],
+    abilities: [ABILITIES.daKilla],
+    notes: 'BATTLELINE - tough melee infantry',
   },
   {
     id: 'slugga-boyz',
     name: 'Slugga Boyz',
     role: 'troops',
-    keywords: ['ORKS', 'INFANTRY', 'BOYZ'],
+    keywords: ['ORKS', 'INFANTRY', 'BATTLELINE', 'BOYZ'],
     profiles: [{
       models: 10,
-      profile: { move: 6, toughness: 4, save: 6, wounds: 1, leadership: 7, oc: 1 },
-      basePoints: 90,
+      profile: { move: 5, toughness: 5, save: 6, wounds: 1, leadership: 7, oc: 1 },
+      basePoints: 80,
     }],
     weapons: [
       { weaponId: 'slugga', isDefault: true, cost: 0 },
       { weaponId: 'choppa', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.daKilla, ABILITIES.kultur],
+    abilities: [ABILITIES.daKilla],
     notes: 'BATTLELINE - melee focused',
   },
   {
     id: 'shoota-boyz',
     name: 'Shoota Boyz',
     role: 'troops',
-    keywords: ['ORKS', 'INFANTRY', 'BOYZ'],
+    keywords: ['ORKS', 'INFANTRY', 'BATTLELINE', 'BOYZ'],
     profiles: [{
       models: 10,
-      profile: { move: 6, toughness: 4, save: 6, wounds: 1, leadership: 7, oc: 1 },
-      basePoints: 90,
+      profile: { move: 5, toughness: 5, save: 6, wounds: 1, leadership: 7, oc: 1 },
+      basePoints: 80,
     }],
     weapons: [
       { weaponId: 'shoota', isDefault: true, cost: 0 },
       { weaponId: 'slugga', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.dakka, ABILITIES.kultur],
+    abilities: [ABILITIES.dakka],
     notes: 'BATTLELINE - shooty',
   },
 
@@ -674,7 +750,7 @@ const UNITS: Unit[] = [
       { weaponId: 'bigChoppa', isDefault: false, cost: 5 },
       { weaponId: 'powerKlaw', isDefault: false, cost: 10 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Elite melee infantry',
   },
   {
@@ -699,7 +775,7 @@ const UNITS: Unit[] = [
       { weaponId: 'powerKlaw', isDefault: false, cost: 10 },
       { weaponId: 'killsaw', isDefault: false, cost: 15 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Heavy elite infantry',
   },
   {
@@ -716,7 +792,7 @@ const UNITS: Unit[] = [
       { weaponId: 'choppa', isDefault: true, cost: 0 },
       { weaponId: 'skorcha', isDefault: false, cost: 5 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Fire specialists',
   },
   {
@@ -732,7 +808,7 @@ const UNITS: Unit[] = [
     weapons: [
       { weaponId: 'deffgun', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Heavy firepower',
   },
   {
@@ -749,7 +825,7 @@ const UNITS: Unit[] = [
       { weaponId: 'rokkits', isDefault: true, cost: 0 },
       { weaponId: 'bigChoppa', isDefault: false, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Anti-tank specialists',
   },
   {
@@ -766,7 +842,7 @@ const UNITS: Unit[] = [
       { weaponId: 'slugga', isDefault: true, cost: 0 },
       { weaponId: 'grotKnives', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Commands Gretchin',
   },
   {
@@ -783,7 +859,7 @@ const UNITS: Unit[] = [
       { weaponId: 'powerKlaw', isDefault: true, cost: 0 },
       { weaponId: 'slugga', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Commands Boyz',
   },
   {
@@ -799,7 +875,7 @@ const UNITS: Unit[] = [
     weapons: [
       { weaponId: 'gunz', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Artillery support',
   },
   {
@@ -817,7 +893,7 @@ const UNITS: Unit[] = [
       { weaponId: 'skorcha', isDefault: false, cost: 5 },
       { weaponId: 'rokkits', isDefault: false, cost: 10 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Heavy walker',
   },
   {
@@ -836,7 +912,7 @@ const UNITS: Unit[] = [
       { weaponId: 'skorcha', isDefault: false, cost: 5 },
       { weaponId: 'zzapgun', isDefault: false, cost: 10 },
     ],
-    abilities: [ABILITIES.kultur, ABILITIES.speed],
+    abilities: [ABILITIES.speed],
     notes: 'Heavy walker with guns',
   },
   {
@@ -854,7 +930,7 @@ const UNITS: Unit[] = [
       { weaponId: 'kustomBlast', isDefault: false, cost: 10 },
       { weaponId: 'zzapgun', isDefault: false, cost: 10 },
     ],
-    abilities: [ABILITIES.kultur, ABILITIES.speed],
+    abilities: [ABILITIES.speed],
     notes: 'Kustom force field',
   },
   {
@@ -872,7 +948,7 @@ const UNITS: Unit[] = [
       { weaponId: 'bigShoota', isDefault: false, cost: 0 },
       { weaponId: 'kustomBlast', isDefault: false, cost: 10 },
     ],
-    abilities: [ABILITIES.kultur, ABILITIES.speed],
+    abilities: [ABILITIES.speed],
     notes: 'Fast attack walker',
   },
 
@@ -891,7 +967,7 @@ const UNITS: Unit[] = [
       { weaponId: 'bigShoota', isDefault: true, cost: 0 },
       { weaponId: 'choppa', isDefault: false, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Fast cavalry',
   },
   {
@@ -907,25 +983,8 @@ const UNITS: Unit[] = [
     weapons: [
       { weaponId: 'choppa', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Fast melee cavalry',
-  },
-  {
-    id: 'stormboyz',
-    name: 'Stormboyz',
-    role: 'fast-attack',
-    keywords: ['ORKS', 'INFANTRY', 'FLY'],
-    profiles: [{
-      models: 5,
-      profile: { move: 12, toughness: 4, save: 6, wounds: 1, leadership: 7, oc: 1 },
-      basePoints: 55,
-    }],
-    weapons: [
-      { weaponId: 'choppa', isDefault: true, cost: 0 },
-      { weaponId: 'slugga', isDefault: true, cost: 0 },
-    ],
-    abilities: [ABILITIES.kultur],
-    notes: 'Jump pack troops',
   },
   {
     id: 'boomdakka-snazzwagon',
@@ -957,7 +1016,7 @@ const UNITS: Unit[] = [
       { weaponId: 'rokkitGun', isDefault: true, cost: 0 },
       { weaponId: 'killa', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Teleporting gun wagon',
   },
   {
@@ -991,7 +1050,7 @@ const UNITS: Unit[] = [
       { weaponId: 'rokkit', isDefault: true, cost: 0 },
       { weaponId: 'kombiWeapon', isDefault: false, cost: 5 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Shooting transport',
   },
   {
@@ -1007,7 +1066,7 @@ const UNITS: Unit[] = [
     weapons: [
       { weaponId: 'kombiWeapon', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Board clearing transport',
   },
   {
@@ -1023,7 +1082,7 @@ const UNITS: Unit[] = [
     weapons: [
       { weaponId: 'bossSaws', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Ridable monster',
   },
   {
@@ -1040,7 +1099,7 @@ const UNITS: Unit[] = [
       { weaponId: 'bigChoppa', isDefault: true, cost: 0 },
       { weaponId: 'kombiWeapon', isDefault: false, cost: 5 },
     ],
-    abilities: [ABILITIES.waaagh, ABILITIES.kultur],
+    abilities: [ABILITIES.waaagh],
     notes: 'Flying warlord',
   },
 
@@ -1060,7 +1119,7 @@ const UNITS: Unit[] = [
       { weaponId: 'deffgun', isDefault: false, cost: 10 },
       { weaponId: 'killkannon', isDefault: false, cost: 10 },
     ],
-    abilities: [ABILITIES.kultur, ABILITIES.speed],
+    abilities: [ABILITIES.speed],
     transportCapacity: 12,
     notes: 'Heavy transport',
   },
@@ -1078,7 +1137,7 @@ const UNITS: Unit[] = [
       { weaponId: 'bigGun', isDefault: true, cost: 0 },
       { weaponId: 'deffgun', isDefault: false, cost: 10 },
     ],
-    abilities: [ABILITIES.kultur, ABILITIES.speed],
+    abilities: [ABILITIES.speed],
     transportCapacity: 12,
     notes: 'Heavy transport variant',
   },
@@ -1096,7 +1155,7 @@ const UNITS: Unit[] = [
       { weaponId: 'saw', isDefault: true, cost: 0 },
       { weaponId: 'zzapgun', isDefault: false, cost: 10 },
     ],
-    abilities: [ABILITIES.kultur, ABILITIES.speed],
+    abilities: [ABILITIES.speed],
     transportCapacity: 6,
     notes: 'Beast platform',
   },
@@ -1113,7 +1172,7 @@ const UNITS: Unit[] = [
     weapons: [
       { weaponId: 'kill', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Anti-tank killer',
   },
   {
@@ -1194,7 +1253,7 @@ const UNITS: Unit[] = [
       { weaponId: 'bigShoota', isDefault: true, cost: 0 },
       { weaponId: 'mineLauncher', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Mine deployment',
   },
   {
@@ -1210,7 +1269,7 @@ const UNITS: Unit[] = [
     weapons: [
       { weaponId: 'smasha', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur],
+    abilities: [],
     notes: 'Mek Gun variant',
   },
   {
@@ -1226,7 +1285,7 @@ const UNITS: Unit[] = [
     weapons: [
       { weaponId: 'bigShoota', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur, ABILITIES.speed],
+    abilities: [ABILITIES.speed],
     transportCapacity: 12,
     notes: 'Fast transport',
   },
@@ -1243,7 +1302,7 @@ const UNITS: Unit[] = [
     weapons: [
       { weaponId: 'bigGun', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur, ABILITIES.speed],
+    abilities: [ABILITIES.speed],
     transportCapacity: 12,
     notes: 'Heavy transport',
   },
@@ -1260,7 +1319,7 @@ const UNITS: Unit[] = [
     weapons: [
       { weaponId: 'kill', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur, ABILITIES.speed],
+    abilities: [ABILITIES.speed],
     transportCapacity: 12,
     notes: 'Ram wagon',
   },
@@ -1277,7 +1336,7 @@ const UNITS: Unit[] = [
     weapons: [
       { weaponId: 'saw', isDefault: true, cost: 0 },
     ],
-    abilities: [ABILITIES.kultur, ABILITIES.speed],
+    abilities: [ABILITIES.speed],
     transportCapacity: 12,
     notes: 'Crusher wagon',
   },

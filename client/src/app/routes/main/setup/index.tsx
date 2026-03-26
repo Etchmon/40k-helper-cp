@@ -9,6 +9,11 @@ import { ReadyStep } from './ready-step';
 import { CombatPatrolSetupStep } from './combat-patrol-setup-step';
 import { useNavigate } from 'react-router-dom';
 import { getCombatPatrolRoster } from '@/data';
+import { Button } from '@/components/ui/button';
+import { CardContent } from '@/components/ui/card';
+import { Menu, X, ChevronLeft, ChevronRight, Home, RotateCcw } from 'lucide-react';
+import { confirm } from '@/components/ui/confirm-dialog';
+import { useToast } from '@/hooks/use-toast';
 
 type SetupStep = 
   | 'settings'
@@ -47,8 +52,10 @@ const COMBAT_PATROL_STEP_ORDER: SetupStep[] = [
 
 export function SetupIndex() {
   const [currentStep, setCurrentStep] = useState<SetupStep>('settings');
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const navigate = useNavigate();
   const { state, dispatch } = useGame();
+  useToast();
 
   const isCombatPatrol = state.settings.gameSize === 'combat-patrol';
   const STEP_ORDER = isCombatPatrol ? COMBAT_PATROL_STEP_ORDER : REGULAR_STEP_ORDER;
@@ -86,6 +93,25 @@ export function SetupIndex() {
   const handleStartGame = () => {
     dispatch({ type: 'START_GAME' });
     navigate('/app/game/play');
+  };
+
+  const handleNewGame = async () => {
+    const confirmed = await confirm({
+      title: 'Start New Game?',
+      message: 'Start a new game? Current setup will be lost.',
+      confirmText: 'New Game',
+      cancelText: 'Keep Setup',
+      variant: 'destructive',
+    });
+    
+    if (confirmed) {
+      dispatch({ type: 'RESET_GAME' });
+      navigate('/app/game/setup');
+    }
+  };
+
+  const handleQuit = () => {
+    navigate('/');
   };
 
   const renderStep = () => {
@@ -183,12 +209,86 @@ export function SetupIndex() {
   };
 
   return (
-    <div className="min-h-screen bg-crust p-4 md:p-8">
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-text text-center mb-4">
-            Warhammer 40k Game Setup
-          </h1>
+    <div className="min-h-screen bg-crust pb-24 lg:pb-6">
+      {/* Mobile Header with Hamburger Menu */}
+      <header className="lg:hidden bg-crust/95 border-b border-surface0 sticky top-0 z-20 backdrop-blur-md safe-area-inset-top">
+        <div className="px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Button
+                variant="ghost"
+                size="icon-sm"
+                onClick={() => setShowMobileMenu(!showMobileMenu)}
+              >
+                {showMobileMenu ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </Button>
+              <div className="flex flex-col">
+                <span className="text-[10px] text-overlay1 uppercase tracking-wider">Setup</span>
+                <span className="text-base font-semibold text-text truncate max-w-[180px]">
+                  {getStepLabel(currentStep)}
+                </span>
+              </div>
+            </div>
+            
+            <div className="flex items-center gap-1">
+              <span className="text-xs text-overlay1 mr-2">
+                {currentIndex + 1}/{STEP_ORDER.length}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile Slide-out Menu */}
+        {showMobileMenu && (
+          <div className="absolute top-full left-0 right-0 bg-surface0 border-b border-surface1 z-30">
+            <CardContent className="p-2 space-y-1">
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-left text-text"
+                onClick={() => { handleQuit(); setShowMobileMenu(false); }}
+              >
+                <Home className="w-4 h-4 mr-2" />
+                Exit to Menu
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-left text-text"
+                onClick={() => { handleNewGame(); setShowMobileMenu(false); }}
+              >
+                <RotateCcw className="w-4 h-4 mr-2" />
+                Start Over
+              </Button>
+            </CardContent>
+          </div>
+        )}
+      </header>
+
+      {/* Desktop & Main Content */}
+      <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 lg:py-8">
+        {/* Desktop Header */}
+        <div className="hidden lg:flex items-center justify-between mb-8">
+          <div>
+            <h1 className="text-2xl font-bold text-text">
+              Game Setup
+            </h1>
+            <p className="text-sm text-overlay1">
+              {getStepLabel(currentStep)}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button variant="outline" size="sm" onClick={handleQuit}>
+              <Home className="w-4 h-4 mr-2" />
+              Exit
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleNewGame}>
+              <RotateCcw className="w-4 h-4 mr-2" />
+              Start Over
+            </Button>
+          </div>
+        </div>
+
+        {/* Desktop Progress Bar */}
+        <div className="hidden lg:block mb-8">
           <div className="flex items-center justify-center gap-2 overflow-x-auto pb-2">
             {STEP_ORDER.map((step, index) => (
               <div
@@ -212,7 +312,7 @@ export function SetupIndex() {
                 >
                   {index < currentIndex ? '✓' : index + 1}
                 </div>
-                <span className="ml-2 text-sm whitespace-nowrap hidden md:inline">
+                <span className="ml-2 text-sm whitespace-nowrap">
                   {getStepLabel(step)}
                 </span>
                 {index < STEP_ORDER.length - 1 && (
@@ -224,6 +324,41 @@ export function SetupIndex() {
                 )}
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Mobile Progress */}
+        <div className="lg:hidden mb-6">
+          <div className="w-full bg-surface0 rounded-full h-2 mb-2">
+            <div 
+              className="bg-mauve h-2 rounded-full transition-all"
+              style={{ width: `${((currentIndex + 1) / STEP_ORDER.length) * 100}%` }}
+            />
+          </div>
+          <div className="flex items-center justify-between">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={goBack}
+              disabled={currentIndex === 0}
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </Button>
+            <span className="text-sm text-overlay1">
+              Step {currentIndex + 1} of {STEP_ORDER.length}
+            </span>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={currentIndex === STEP_ORDER.length - 1 ? handleStartGame : goNext}
+              className={currentIndex === STEP_ORDER.length - 1 ? "bg-green/20 text-green border-green" : ""}
+            >
+              {currentIndex === STEP_ORDER.length - 1 ? (
+                <>Start</>
+              ) : (
+                <ChevronRight className="w-4 h-4" />
+              )}
+            </Button>
           </div>
         </div>
 

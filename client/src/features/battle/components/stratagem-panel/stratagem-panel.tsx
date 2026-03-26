@@ -14,7 +14,7 @@ import {
 import { Phase, PHASES } from '@/types/game';
 import { 
   Zap, Shield, Target, Crosshair, Clock, CheckCircle2, AlertCircle,
-  ChevronDown, ChevronUp, Sparkles
+  ChevronDown, ChevronUp, Sparkles, X
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -22,8 +22,8 @@ const PHASE_COLORS: Record<Phase, string> = {
   command: 'text-yellow',
   movement: 'text-blue',
   shooting: 'text-red',
-  charge: 'text-orange',
-  fight: 'text-purple',
+  charge: 'text-mauve',
+  fight: 'text-pink',
 };
 
 const PHASE_ICONS: Record<Phase, React.ReactNode> = {
@@ -38,8 +38,8 @@ const PHASE_BG: Record<Phase, string> = {
   command: 'bg-yellow/10 border-yellow/30',
   movement: 'bg-blue/10 border-blue/30',
   shooting: 'bg-red/10 border-red/30',
-  charge: 'bg-orange/10 border-orange/30',
-  fight: 'bg-purple/10 border-purple/30',
+  charge: 'bg-mauve/10 border-mauve/30',
+  fight: 'bg-pink/10 border-pink/30',
 };
 
 const STRATAGEM_TYPE_COLORS: Record<string, string> = {
@@ -56,9 +56,10 @@ export function StratagemPanel() {
   const { battle, turn, players } = state;
   const currentPhase = turn.phase;
   const activePlayer = turn.activePlayer;
-  const activeSetup = players[activePlayer - 1];
+  const activeSetup = players[activePlayer - 1] ?? { factionId: null, detachmentId: null };
   
   const [showOnlyAvailable, setShowOnlyAvailable] = useState(true);
+  const [selectedStratagem, setSelectedStratagem] = useState<StratagemWithSource | null>(null);
   const [expandedTypes, setExpandedTypes] = useState<Record<string, boolean>>({
     'Available Now': true,
     'Battle Tactic': true,
@@ -67,7 +68,7 @@ export function StratagemPanel() {
     'Wargear': false,
   });
 
-  const currentCP = battle.commandPoints.current[activePlayer - 1];
+  const currentCP = battle.commandPoints.current[activePlayer - 1] ?? 0;
   const phaseName = PHASES[currentPhase].name;
 
   const allStratagems = useMemo(() => {
@@ -133,23 +134,25 @@ export function StratagemPanel() {
     const isReady = stratagem.isAvailableNow && canAfford;
     
     return (
-      <div
+      <button
         key={stratagem.id}
-        className={`p-4 rounded-xl border-2 transition-all touch-manipulation ${
+        onClick={() => setSelectedStratagem(stratagem)}
+        className={`w-full p-3 rounded-lg border text-left transition-all touch-manipulation cursor-pointer hover:border-mauve/50 ${
           isReady
             ? 'bg-surface1 border-blue/50 active:border-blue'
             : stratagem.isAvailableNow
               ? 'bg-surface1 border-yellow/50 opacity-90'
               : 'bg-surface0/50 border-surface1 opacity-60'
         }`}
+        aria-label={`View details for ${stratagem.name}`}
       >
-        <div className="flex items-start justify-between gap-3">
+        <div className="flex items-start justify-between gap-2">
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-semibold text-base text-text">
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <span className="font-semibold text-sm text-text">
                 {stratagem.name}
               </span>
-              <span className={`px-2 py-1 rounded-lg text-sm font-bold shrink-0 ${
+              <span className={`px-1.5 py-0.5 rounded text-xs font-bold shrink-0 ${
                 stratagem.cost === 1 ? 'bg-green/20 text-green' :
                 stratagem.cost === 2 ? 'bg-yellow/20 text-yellow' :
                 'bg-red/20 text-red'
@@ -163,21 +166,21 @@ export function StratagemPanel() {
               )}
               {showNowBadge && isReady && (
                 <span className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs bg-green/20 text-green shrink-0">
-                  <CheckCircle2 className="w-3 h-3" />
+                  <CheckCircle2 className="w-3 h-3" aria-hidden="true" />
                   Ready
                 </span>
               )}
             </div>
-            <p className="text-sm text-subtext0 mt-2 line-clamp-2 leading-relaxed">
+            <p className="text-xs text-subtext0 mt-1 line-clamp-2">
               {stratagem.description}
             </p>
-            <div className="flex items-center gap-2 mt-3 flex-wrap">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs bg-surface0 text-text">
+            <div className="flex items-center gap-1.5 mt-2 flex-wrap">
+              <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs bg-surface0 text-text">
                 {PHASE_ICONS[currentPhase]}
-                {phaseName}
+                <span aria-hidden="true">{phaseName}</span>
               </span>
               {stratagem.target && (
-                <span className="text-xs text-subtext0 truncate max-w-[150px]" title={stratagem.target}>
+                <span className="text-xs text-subtext0 truncate max-w-[100px]" title={stratagem.target}>
                   → {stratagem.target}
                 </span>
               )}
@@ -187,13 +190,16 @@ export function StratagemPanel() {
             size="sm"
             variant={isReady ? 'default' : 'ghost'}
             disabled={!canAfford}
-            onClick={() => handleUseStratagem(stratagem)}
-            className="shrink-0 min-w-[70px] h-10"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleUseStratagem(stratagem);
+            }}
+            className="shrink-0 min-w-[60px] h-8 text-xs"
           >
             {canAfford ? 'Use' : 'Need CP'}
           </Button>
         </div>
-      </div>
+      </button>
     );
   };
 
@@ -207,27 +213,30 @@ export function StratagemPanel() {
     if (stratagems.length === 0) return null;
     
     const isExpanded = expandedTypes[title] ?? defaultExpanded;
+    const categoryId = `stratagem-category-${title.toLowerCase().replace(/\s+/g, '-')}`;
     
     return (
-      <div className="border-2 border-surface0 rounded-xl overflow-hidden">
+      <div className="border border-surface0 rounded-lg overflow-hidden">
         <button
           onClick={() => toggleExpanded(title)}
-          className={`w-full px-4 py-4 flex items-center justify-between touch-manipulation ${color}`}
+          className={`w-full px-3 py-2 flex items-center justify-between touch-manipulation ${color}`}
+          aria-expanded={isExpanded}
+          aria-controls={categoryId}
         >
-          <span className="flex items-center gap-3 font-semibold text-base">
-            {icon}
+          <span className="flex items-center gap-2 font-semibold text-sm">
+            <span aria-hidden="true">{icon}</span>
             {title}
-            <span className="px-2 py-1 bg-black/20 rounded-lg text-xs">({stratagems.length})</span>
+            <span className="px-1.5 py-0.5 bg-black/20 rounded text-xs">({stratagems.length})</span>
           </span>
           {isExpanded ? (
-            <ChevronUp className="w-6 h-6" />
+            <ChevronUp className="w-4 h-4" aria-hidden="true" />
           ) : (
-            <ChevronDown className="w-6 h-6" />
+            <ChevronDown className="w-4 h-4" aria-hidden="true" />
           )}
         </button>
         
         {isExpanded && (
-          <div className="p-4 space-y-3 bg-crust/50">
+          <div id={categoryId} className="p-2 space-y-2 bg-crust/50">
             {stratagems.map(stratagem => renderStratagem(stratagem, title === 'Available Now'))}
           </div>
         )}
@@ -236,48 +245,49 @@ export function StratagemPanel() {
   };
 
   return (
-    <Card className="mb-4 overflow-hidden">
-      <CardHeader className="bg-surface0/50 pb-3">
-        <div className="flex items-center justify-between flex-wrap gap-3">
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Zap className="w-5 h-5 text-yellow" />
+    <div className="h-full flex flex-col">
+    <Card className="flex-1 flex flex-col overflow-hidden border-2 border-surface1">
+      <CardHeader className="bg-surface0/60 py-2 px-3 border-b border-surface1">
+        <div className="flex items-center justify-between gap-2">
+          <CardTitle className="text-sm font-bold flex items-center gap-2">
+            <Zap className="w-4 h-4 text-yellow" />
             Stratagems
           </CardTitle>
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 px-3 py-1.5 bg-green/10 rounded-lg border border-green/30">
-              <span className="font-bold text-green text-lg">{currentCP}</span>
-              <span className="text-sm text-subtext0">CP</span>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 px-2 py-0.5 bg-green/20 rounded border border-green/40">
+              <span className="font-bold text-green text-sm">{currentCP}</span>
+              <span className="text-[10px] text-overlay1">CP</span>
             </div>
             <Button
               variant={showOnlyAvailable ? 'default' : 'outline'}
               onClick={() => setShowOnlyAvailable(!showOnlyAvailable)}
-              className="h-10 px-4"
+              className="h-7 px-2 text-xs"
             >
-              {showOnlyAvailable ? 'Show All' : 'Show Available'}
+              {showOnlyAvailable ? 'All' : 'Avail'}
             </Button>
           </div>
         </div>
-        <div className="flex items-center gap-2 mt-2">
-          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-medium ${PHASE_BG[currentPhase]} ${PHASE_COLORS[currentPhase]}`}>
+        <div className="flex items-center gap-1 mt-1.5">
+          <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${PHASE_BG[currentPhase]} ${PHASE_COLORS[currentPhase]}`}>
             {PHASE_ICONS[currentPhase]}
             {phaseName}
           </span>
           {activeSetup.factionId && (
-            <span className="text-xs text-subtext0">
-              {availableCount} ready • {affordableCount} affordable
+            <span className="text-[10px] text-overlay1 ml-1">
+              {availableCount} ready • {affordableCount} avail
             </span>
           )}
         </div>
       </CardHeader>
       
-      <CardContent className="pt-3">
+      <CardContent className="pt-1 pb-1 flex-1 overflow-auto">
         {!activeSetup.factionId ? (
-          <div className="text-center py-8 text-subtext0">
-            <AlertCircle className="w-10 h-10 mx-auto mb-3 opacity-50" />
-            <p className="text-base">Select a faction to view stratagems</p>
+          <div className="text-center py-2 text-subtext0">
+            <AlertCircle className="w-6 h-6 mx-auto mb-1 opacity-50" />
+            <p className="text-xs">Select faction</p>
           </div>
         ) : (
-          <div className="space-y-3 max-h-[450px] lg:max-h-[500px] overflow-y-auto pr-1 pb-4 touch-pan-y">
+          <div className="space-y-2 max-h-[calc(100vh-280px)] lg:max-h-[350px] overflow-y-auto pr-1 pb-2 touch-pan-y">
             {showOnlyAvailable && renderCategory(
               'Available Now',
               stratagemsNow,
@@ -350,6 +360,129 @@ export function StratagemPanel() {
         )}
       </CardContent>
     </Card>
+
+    {/* Stratagem Detail Modal */}
+    {selectedStratagem && (
+      <div 
+        className="fixed inset-0 z-50 flex items-center justify-center p-4"
+        onClick={() => setSelectedStratagem(null)}
+      >
+        {/* Backdrop */}
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+        
+        {/* Modal Content */}
+        <div 
+          className="relative bg-crust border-2 border-surface1 rounded-xl w-full max-w-md max-h-[80vh] overflow-hidden shadow-2xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header */}
+          <div className="bg-surface0/80 px-4 py-3 border-b border-surface1 flex items-start justify-between gap-3">
+            <div className="flex-1">
+              <h3 className="text-lg font-bold text-text">{selectedStratagem.name}</h3>
+              <div className="flex items-center gap-2 mt-1 flex-wrap">
+                <span className={`px-2 py-0.5 rounded text-sm font-bold ${
+                  selectedStratagem.cost === 1 ? 'bg-green/20 text-green' :
+                  selectedStratagem.cost === 2 ? 'bg-yellow/20 text-yellow' :
+                  'bg-red/20 text-red'
+                }`}>
+                  {selectedStratagem.cost} CP
+                </span>
+                {selectedStratagem.type && (
+                  <span className={`px-2 py-0.5 rounded text-xs font-medium ${
+                    STRATAGEM_TYPE_COLORS[selectedStratagem.type] || STRATAGEM_TYPE_COLORS['Other']
+                  }`}>
+                    {selectedStratagem.type}
+                  </span>
+                )}
+                {selectedStratagem.isUniversal && (
+                  <span className="px-2 py-0.5 rounded text-xs bg-surface1 text-subtext0">
+                    Universal
+                  </span>
+                )}
+              </div>
+            </div>
+            <button 
+              onClick={() => setSelectedStratagem(null)}
+              className="p-2 rounded-lg hover:bg-surface1 transition-colors touch-manipulation"
+            >
+              <X className="w-5 h-5 text-subtext0" />
+            </button>
+          </div>
+
+          {/* Content */}
+          <div className="p-4 overflow-y-auto max-h-[60vh]">
+            {/* Phase */}
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-overlay1 uppercase tracking-wider mb-2">Phase</h4>
+              <div className="flex items-center gap-2 flex-wrap">
+                {selectedStratagem.phases?.map(phase => (
+                  <span key={phase} className={`px-3 py-1.5 rounded-lg text-sm font-medium ${PHASE_BG[phase as Phase] || 'bg-surface0'} ${PHASE_COLORS[phase as Phase] || 'text-text'}`}>
+                    {PHASES[phase as Phase]?.name || phase}
+                  </span>
+                ))}
+                {(!selectedStratagem.phases || selectedStratagem.phases.length === 0) && (
+                  <span className="px-3 py-1.5 rounded-lg text-sm bg-surface0 text-text">Any Phase</span>
+                )}
+              </div>
+            </div>
+
+            {/* Description */}
+            <div className="mb-4">
+              <h4 className="text-xs font-semibold text-overlay1 uppercase tracking-wider mb-2">Description</h4>
+              <p className="text-sm text-text leading-relaxed">{selectedStratagem.description}</p>
+            </div>
+
+            {/* When Used */}
+            {selectedStratagem.whenUsed && (
+              <div className="mb-4">
+                <h4 className="text-xs font-semibold text-overlay1 uppercase tracking-wider mb-2">When Used</h4>
+                <p className="text-sm text-text leading-relaxed">{selectedStratagem.whenUsed}</p>
+              </div>
+            )}
+
+            {/* Target */}
+            {selectedStratagem.target && (
+              <div className="mb-4">
+                <h4 className="text-xs font-semibold text-overlay1 uppercase tracking-wider mb-2">Target</h4>
+                <p className="text-sm text-text">{selectedStratagem.target}</p>
+              </div>
+            )}
+
+            {/* Restrictions */}
+            {(selectedStratagem.restriction || selectedStratagem.restrictions) && (
+              <div className="mb-4">
+                <h4 className="text-xs font-semibold text-overlay1 uppercase tracking-wider mb-2">Restrictions</h4>
+                {selectedStratagem.restriction && (
+                  <p className="text-sm text-red leading-relaxed">{selectedStratagem.restriction}</p>
+                )}
+                {selectedStratagem.restrictions?.map((rest, i) => (
+                  <p key={i} className="text-sm text-red leading-relaxed">• {rest}</p>
+                ))}
+              </div>
+            )}
+
+            {/* Source */}
+            {selectedStratagem.detachmentName && (
+              <div className="pt-3 border-t border-surface1">
+                <h4 className="text-xs font-semibold text-overlay1 uppercase tracking-wider mb-1">Source</h4>
+                <p className="text-sm text-mauve">{selectedStratagem.detachmentName}</p>
+              </div>
+            )}
+          </div>
+
+          {/* Footer */}
+          <div className="bg-surface0/50 px-4 py-3 border-t border-surface1">
+            <button 
+              onClick={() => setSelectedStratagem(null)}
+              className="w-full py-3 px-4 bg-surface1 hover:bg-surface2 rounded-lg text-sm font-medium text-text transition-colors touch-manipulation"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+    </div>
   );
 }
 

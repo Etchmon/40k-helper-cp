@@ -12,12 +12,12 @@ const DARK_ANGELS_UNIQUE_UNITS: Unit[] = [
       {
         models: 5,
         profile: { move: 5, toughness: 5, save: 2, wounds: 3, leadership: 6, oc: 1 },
-        basePoints: 210,
+        basePoints: 180,
       },
       {
         models: 10,
         profile: { move: 5, toughness: 5, save: 2, wounds: 3, leadership: 6, oc: 1 },
-        basePoints: 420,
+        basePoints: 360,
       },
     ],
     weapons: [
@@ -33,12 +33,12 @@ const DARK_ANGELS_UNIQUE_UNITS: Unit[] = [
         description: 'Each time this unit finishes a Charge move, until the end of the turn, melee weapons equipped by models in this unit have the [LETHAL HITS] ability.',
       },
       {
-        id: 'and-they-shall-know-no-fear',
-        name: 'And They Shall Know No Fear',
-        description: 'ADEPTUS ASTARTES units automatically pass Battle-shock tests.',
+        id: 'watcher-in-the-dark',
+        name: 'Watcher in the Dark',
+        description: 'Once per battle, just after a mortal wound is allocated to an ADEPTUS ASTARTES model in this unit, this unit can summon a Watcher in the Dark.',
       },
     ],
-    notes: 'Elite Terminators with Deathwing keyword',
+    notes: 'Elite Terminators with Deathwing keyword - can include Watcher in the Dark',
   },
   {
     id: 'ravenwing-black-knight-squad',
@@ -48,30 +48,25 @@ const DARK_ANGELS_UNIQUE_UNITS: Unit[] = [
     profiles: [
       {
         models: 3,
-        profile: { move: 14, toughness: 4, save: 3, wounds: 3, leadership: 6, oc: 1 },
-        basePoints: 135,
+        profile: { move: 12, toughness: 5, save: 3, wounds: 3, leadership: 6, oc: 2 },
+        basePoints: 80,
       },
       {
         models: 6,
-        profile: { move: 14, toughness: 4, save: 3, wounds: 3, leadership: 6, oc: 1 },
-        basePoints: 270,
+        profile: { move: 12, toughness: 5, save: 3, wounds: 3, leadership: 6, oc: 2 },
+        basePoints: 160,
       },
     ],
     weapons: [
       { weaponId: 'boltPistol', isDefault: true, cost: 0 },
-      { weaponId: 'closeCombatWeapon', isDefault: true, cost: 0 },
-      { weaponId: 'plasmaPistol', isDefault: false, cost: 5 },
+      { weaponId: 'plasmaTalon', isDefault: true, cost: 0 },
+      { weaponId: 'blackKnightCombatWeapon', isDefault: true, cost: 0 },
     ],
     abilities: [
       {
-        id: 'ravenwing-assault',
-        name: 'Ravenwing Assault',
-        description: 'This unit can Charge in a turn in which it Advanced.',
-      },
-      {
-        id: 'and-they-shall-know-no-fear',
-        name: 'And They Shall Know No Fear',
-        description: 'ADEPTUS ASTARTES units automatically pass Battle-shock tests.',
+        id: 'knights-of-caliban',
+        name: 'Knights of Caliban',
+        description: 'Each time this unit is selected to fight, if it made a Charge move this turn, until the end of the phase, melee weapons have ANTI-MONSTER 4+ and ANTI-VEHICLE 4+.',
       },
     ],
     notes: 'Fast attack cavalry with Ravenwing keyword',
@@ -80,23 +75,24 @@ const DARK_ANGELS_UNIQUE_UNITS: Unit[] = [
     id: 'ravenwing-darkshroud',
     name: 'Ravenwing Darkshroud',
     role: 'fast-attack',
-    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'DARK ANGELS', 'VEHICLE', 'RAVENWING', 'DARKSHRoud'],
+    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'DARK ANGELS', 'VEHICLE', 'FLY', 'RAVENWING', 'DARKSHRoud'],
     profiles: [{
       models: 1,
-      profile: { move: 14, toughness: 8, save: 3, wounds: 8, leadership: 6, oc: 3 },
-      basePoints: 130,
+      profile: { move: 14, toughness: 8, save: 3, wounds: 10, leadership: 6, oc: 3 },
+      basePoints: 100,
     }],
     weapons: [
-      { weaponId: 'enfilade-autocannon', isDefault: true, cost: 0 },
+      { weaponId: 'heavyBolter', isDefault: true, cost: 0 },
+      { weaponId: 'assaultCannon', isDefault: false, cost: 0 },
     ],
     abilities: [
       {
-        id: 'shroud-of-Death',
-        name: 'Shroud of Death',
-        description: 'While this model is on the battlefield, enemy units within 12" of it cannot useCommand Reports or aura abilities.',
+        id: 'icon-of-old-caliban',
+        name: 'Icon of Old Caliban (Aura)',
+        description: 'While a friendly ADEPTUS ASTARTES unit is within 6" of this model, models in that unit have the Stealth ability and Benefit of Cover against ranged attacks.',
       },
     ],
-    notes: 'Ravenwing support vehicle',
+    notes: 'Ravenwing support vehicle with aura abilities',
   },
   {
     id: 'ravenwing-land-speeder-vengeance',
@@ -128,21 +124,60 @@ const DARK_ANGELS_UNIQUE_UNITS: Unit[] = [
     keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'DARK ANGELS', 'INFANTRY', 'CHARACTER', 'PSYKER', 'LIBRARIAN', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 6, toughness: 4, save: 3, wounds: 5, leadership: 7, oc: 1 },
-      basePoints: 95,
+      profile: { move: 6, toughness: 4, save: 2, wounds: 4, leadership: 6, oc: 1 },
+      basePoints: 75,
     }],
     weapons: [
-      { weaponId: 'boltPistol', isDefault: true, cost: 0 },
-      { weaponId: 'forceWeapon', isDefault: true, cost: 0 },
+      { weaponId: 'deliverer', isDefault: true, cost: 0 },
+      { weaponId: 'mindWipe', isDefault: true, cost: 0 },
+      { weaponId: 'traitorsBane', isDefault: true, cost: 0 },
     ],
     abilities: [
       {
-        id: 'mind-wipe',
-        name: 'Mind Wipe',
-        description: 'At the end of the Fight phase, select one enemy unit within 6" of this model that had models destroyed this phase. Subtract 1 from Leadership for the rest of the battle.',
+        id: 'psychic-hood',
+        name: 'Psychic Hood',
+        description: 'While this model is leading a unit, models in that unit have Feel No Pain 4+ against Psychic Attacks.',
+      },
+      {
+        id: 'engulfing-fear',
+        name: 'Engulfing Fear',
+        description: 'In your Shooting phase, you can select one enemy unit within 18" of this model. That enemy unit must take a Battle-shock test.',
+      },
+      {
+        id: 'book-of-salvation',
+        name: 'Book of Salvation',
+        description: 'While this model is leading a unit, add 1 to the Attacks characteristic of melee weapons equipped by models in that unit. When this model is destroyed, each friendly Adeptus Astartes unit within 6" must take a Battle-shock test.',
       },
     ],
-    notes: 'Librarian with unique abilities',
+    notes: 'Chief Librarian of the Dark Angels',
+  },
+  {
+    id: 'belial',
+    name: 'Belial',
+    role: 'hq',
+    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'DARK ANGELS', 'INFANTRY', 'CHARACTER', 'TERMINATOR', 'EPIC HERO'],
+    profiles: [{
+      models: 1,
+      profile: { move: 5, toughness: 5, save: 2, wounds: 6, leadership: 6, oc: 1 },
+      basePoints: 85,
+    }],
+    weapons: [
+      { weaponId: 'masterCraftedStormBolter', isDefault: true, cost: 0 },
+      { weaponId: 'swordOfSilence', isDefault: true, cost: 0 },
+    ],
+    abilities: [
+      {
+        id: 'grand-master-of-the-deathwing',
+        name: 'Grand Master of the Deathwing',
+        description: 'While this model is leading a unit, each time a model in that unit makes an attack, if a Critical Hit is scored, that attack has the PRECISION ability.',
+      },
+      {
+        id: 'strikes-of-retribution',
+        name: 'Strikes of Retribution',
+        description: 'Each time a melee attack is allocated to this model, after the attacking model\'s unit has finished making its attacks, roll one D6: for each 4+, the attacking unit suffers 1 mortal wound.',
+      },
+    ],
+    notes: 'Grand Master of the Deathwing',
   },
 ];
 
@@ -203,7 +238,7 @@ const DARK_ANGELS_DETACHMENTS: Detachment[] = [
     description: 'The 2nd Company elite who strike with lightning speed on their bikes.',
     rule: {
       id: 'ravenwing-hunter-assault',
-      name: 'Hunter\'s岱堂之击',
+      name: "Hunter's Assault",
       description: 'Ravenwing units from this detachment can charge in a turn in which they Advanced.',
     },
     enhancements: [
@@ -228,22 +263,42 @@ const DARK_ANGELS_DETACHMENTS: Detachment[] = [
     ],
     stratagems: [
       {
-        id: 'targeting-augury',
-        name: 'Targeting Augury',
-        cost: 1,
-        description: 'Add 1 to Hit rolls for the bearer\'s unit\'s ranged attacks until the end of the turn.',
-      },
-      {
-        id: 'whirlwind-of-death',
-        name: 'Whirlwind of Death',
-        cost: 2,
-        description: 'Each model in this unit makes one additional melee attack.',
-      },
-      {
         id: 'pursuit-of-vengeance',
         name: 'Pursuit of Vengeance',
         cost: 1,
         description: 'Add 2" to the Move characteristic of the bearer\'s unit until the end of the turn.',
+      },
+    ],
+  },
+  {
+    id: 'ravens-wing',
+    name: 'Raven\'s Wing',
+    description: 'The elite Ravenwing and Deathwing companies strike from the shadows.',
+    rule: {
+      id: 'ravens-wing',
+      name: 'Raven\'s Wing',
+      description: 'Enemy units within 12" of ADEPTUS ASTARTES units from your army have -1 to Hit.',
+    },
+    enhancements: [
+      {
+        id: 'standard-of-devastation',
+        name: 'Standard of Devastation',
+        points: 30,
+        description: 'Ranged weapons equipped by models in the bearer\'s unit have the SUSTAINED HITS 1 keyword.',
+      },
+      {
+        id: 'shroud-of-darkness',
+        name: 'Shroud of Darkness',
+        points: 20,
+        description: 'Enemy units cannot use Command Reports or aura abilities within 12" of the bearer.',
+      },
+    ],
+    stratagems: [
+      {
+        id: 'strike-from-shadow',
+        name: 'Strike from Shadow',
+        cost: 1,
+        description: 'Deep Strike unit gains +1 to Hit in the first turn it arrives.',
       },
     ],
   },
@@ -257,7 +312,7 @@ export const darkAngels: Faction = {
   keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'DARK ANGELS'],
   armyRule: {
     type: 'oath-of-moment',
-    oathOfMoment: { rerollHits: true, bonusToWound: true }
+    oathOfMoment: { rerollHits: true, bonusToWound: false }
   },
   units: [...SHARED_UNITS, ...DARK_ANGELS_UNIQUE_UNITS],
   detachments: [...GENERIC_DETACHMENTS, ...DARK_ANGELS_DETACHMENTS],

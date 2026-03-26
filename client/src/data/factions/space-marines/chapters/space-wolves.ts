@@ -3,6 +3,77 @@ import { SHARED_UNITS } from '../shared/units';
 import { GENERIC_DETACHMENTS } from '../detachments/generic';
 
 const SPACE_WOLVES_UNIQUE_UNITS: Unit[] = [
+  // Characters (for Warlord selection)
+  {
+    id: 'bjorn-the-fell-handed',
+    name: 'Bjorn the Fell-Handed',
+    role: 'hq',
+    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'SPACE WOLVES', 'INFANTRY', 'CHARACTER', 'DREADNOUGHT', 'EPIC HERO'],
+    profiles: [{
+      models: 1,
+      profile: { move: 9, toughness: 9, save: 2, wounds: 8, leadership: 7, oc: 2, invulnerable: 5 },
+      basePoints: 160,
+    }],
+    weapons: [
+      { weaponId: 'assaultCannon', isDefault: true, cost: 0 },
+      { weaponId: 'heavyFlamer', isDefault: true, cost: 0 },
+      { weaponId: 'trueclaw', isDefault: true, cost: 0 },
+    ],
+    abilities: [
+      {
+        id: 'runic-aura',
+        name: 'Runic Aura',
+        description: 'While this model is within 6" of friendly SPACE WOLVES units, each of those units has the Feel No Pain 4+ ability.',
+      },
+    ],
+    notes: 'Legendary Dreadnought - Warlord in Reserve',
+  },
+  {
+    id: 'ragnar-blackmane',
+    name: 'Ragnar Blackmane',
+    role: 'hq',
+    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'SPACE WOLVES', 'INFANTRY', 'CHARACTER', 'JUMP PACK', 'FLY', 'WOLF GUARD', 'EPIC HERO'],
+    profiles: [{
+      models: 1,
+      profile: { move: 7, toughness: 4, save: 3, wounds: 5, leadership: 7, oc: 1, invulnerable: 4 },
+      basePoints: 100,
+    }],
+    weapons: [
+      { weaponId: 'frostfang', isDefault: true, cost: 0 },
+    ],
+    abilities: [
+      {
+        id: 'fang-of-morkai',
+        name: 'Fang of Morkai',
+        description: 'Each time the bearer makes a melee attack, on an unmodified Hit roll of 6, the attack has the Sustained Hits 1 keyword.',
+      },
+    ],
+    notes: 'Famous Wolf Guard Jump Pack leader',
+  },
+  {
+    id: 'logan-grimnar',
+    name: 'Logan Grimnar',
+    role: 'hq',
+    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'SPACE WOLVES', 'INFANTRY', 'CHARACTER', 'CHAPTER MASTER', 'EPIC HERO'],
+    profiles: [{
+      models: 1,
+      profile: { move: 6, toughness: 5, save: 2, wounds: 8, leadership: 6, oc: 2, invulnerable: 4 },
+      basePoints: 110,
+    }],
+    weapons: [
+      { weaponId: 'stormBolter', isDefault: true, cost: 0 },
+      { weaponId: 'axeMorkai', isDefault: true, cost: 0 },
+    ],
+    abilities: [
+      {
+        id: 'great-wolf',
+        name: 'Great Wolf',
+        description: 'While the bearer is leading a unit, add 1 to the Attacks characteristic of models in that unit.',
+      },
+    ],
+    notes: 'Great Wolf - Chapter Master of Space Wolves',
+  },
+  // Troops
   {
     id: 'blood-claws',
     name: 'Blood Claws',
@@ -10,19 +81,14 @@ const SPACE_WOLVES_UNIQUE_UNITS: Unit[] = [
     keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'SPACE WOLVES', 'INFANTRY', 'BATTLELINE'],
     profiles: [
       {
-        models: 5,
-        profile: { move: 6, toughness: 4, save: 3, wounds: 2, leadership: 6, oc: 1 },
-        basePoints: 85,
-      },
-      {
         models: 10,
         profile: { move: 6, toughness: 4, save: 3, wounds: 2, leadership: 6, oc: 1 },
-        basePoints: 170,
+        basePoints: 135,
       },
       {
-        models: 15,
+        models: 20,
         profile: { move: 6, toughness: 4, save: 3, wounds: 2, leadership: 6, oc: 1 },
-        basePoints: 255,
+        basePoints: 285,
       },
     ],
     weapons: [
@@ -76,6 +142,39 @@ const SPACE_WOLVES_UNIQUE_UNITS: Unit[] = [
       },
     ],
     notes: 'Flexible veteran warriors',
+  },
+  {
+    id: 'wolf-guard',
+    name: 'Wolf Guard',
+    role: 'elites',
+    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'SPACE WOLVES', 'INFANTRY', 'WOLF GUARD'],
+    profiles: [
+      {
+        models: 5,
+        profile: { move: 6, toughness: 4, save: 3, wounds: 2, leadership: 7, oc: 1 },
+        basePoints: 85,
+      },
+      {
+        models: 10,
+        profile: { move: 6, toughness: 4, save: 3, wounds: 2, leadership: 7, oc: 1 },
+        basePoints: 170,
+      },
+    ],
+    weapons: [
+      { weaponId: 'boltPistol', isDefault: true, cost: 0 },
+      { weaponId: 'closeCombatWeapon', isDefault: true, cost: 0 },
+      { weaponId: 'chainsword', isDefault: false, cost: 0 },
+      { weaponId: 'powerFist', isDefault: false, cost: 10 },
+      { weaponId: 'thunderHammer', isDefault: false, cost: 15 },
+    ],
+    abilities: [
+      {
+        id: 'wolf-guard-battle-leader',
+        name: 'Wolf Guard Battle Leader',
+        description: 'While this unit contains a model with the CHARACTER keyword, models in this unit have the Fights First ability.',
+      },
+    ],
+    notes: 'Elite veteran warriors',
   },
   {
     id: 'wulfen',
@@ -280,6 +379,38 @@ const SPACE_WOLVES_DETACHMENTS: Detachment[] = [
     ],
     stratagems: [],
   },
+  {
+    id: 'champions-of-russ',
+    name: 'Champions of Russ',
+    description: 'The legendary warriors of the Space Wolves, bound by ancient Sagas.',
+    rule: {
+      id: 'sagas',
+      name: 'Sagas',
+      description: 'At the start of your Command phase, select one Saga from the following: Saga of the Wolf (enemy units within 6" of your Warlord have -1 Leadership), Saga of the Beast (friendly SPACE WOLVES units have Fights First), Saga of the Ice (friendly SPACE WOLVES units have +2" Move), Saga of the Warrior (friendly SPACE WOLVES units have +1 Attack in melee). The selected Saga lasts until the start of your next Command phase.',
+    },
+    enhancements: [
+      {
+        id: '芬里尔的祝福',
+        name: "Wolf Lord's BJ",
+        points: 25,
+        description: 'The bearer has the Fights First ability.',
+      },
+      {
+        id: '狼之长矛',
+        name: 'Spear of Russ',
+        points: 30,
+        description: 'Melee weapons the bearer is equipped with have the LETHAL HITS and SUSTAINED HITS 1 keywords.',
+      },
+    ],
+    stratagems: [
+      {
+        id: 'tactical-swiftness',
+        name: 'Tactical Swiftness',
+        cost: 1,
+        description: 'Add 2" to the Move characteristic of units in this detachment until the end of the turn.',
+      },
+    ],
+  },
 ];
 
 export const spaceWolves: Faction = {
@@ -290,7 +421,7 @@ export const spaceWolves: Faction = {
   keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'SPACE WOLVES'],
   armyRule: {
     type: 'oath-of-moment',
-    oathOfMoment: { rerollHits: true, bonusToWound: true }
+    oathOfMoment: { rerollHits: true, bonusToWound: false }
   },
   units: [...SHARED_UNITS, ...SPACE_WOLVES_UNIQUE_UNITS],
   detachments: [...GENERIC_DETACHMENTS, ...SPACE_WOLVES_DETACHMENTS],

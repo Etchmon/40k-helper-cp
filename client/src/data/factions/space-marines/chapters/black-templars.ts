@@ -12,12 +12,12 @@ const BLACK_TEMPLARS_UNIQUE_UNITS: Unit[] = [
       {
         models: 5,
         profile: { move: 6, toughness: 4, save: 3, wounds: 2, leadership: 6, oc: 1 },
-        basePoints: 80,
+        basePoints: 150,
       },
       {
         models: 10,
         profile: { move: 6, toughness: 4, save: 3, wounds: 2, leadership: 6, oc: 1 },
-        basePoints: 160,
+        basePoints: 310,
       },
     ],
     weapons: [
@@ -43,14 +43,24 @@ const BLACK_TEMPLARS_UNIQUE_UNITS: Unit[] = [
     keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'BLACK TEMPLARS', 'INFANTRY'],
     profiles: [
       {
+        models: 4,
+        profile: { move: 6, toughness: 4, save: 2, wounds: 3, leadership: 7, oc: 1 },
+        basePoints: 105,
+      },
+      {
         models: 5,
         profile: { move: 6, toughness: 4, save: 2, wounds: 3, leadership: 7, oc: 1 },
-        basePoints: 135,
+        basePoints: 130,
+      },
+      {
+        models: 9,
+        profile: { move: 6, toughness: 4, save: 2, wounds: 3, leadership: 7, oc: 1 },
+        basePoints: 235,
       },
       {
         models: 10,
         profile: { move: 6, toughness: 4, save: 2, wounds: 3, leadership: 7, oc: 1 },
-        basePoints: 270,
+        basePoints: 260,
       },
     ],
     weapons: [
@@ -75,11 +85,11 @@ const BLACK_TEMPLARS_UNIQUE_UNITS: Unit[] = [
     keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'BLACK TEMPLARS', 'INFANTRY', 'CHARACTER', 'CHAPTER MASTER', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 6, toughness: 5, save: 2, wounds: 7, leadership: 7, oc: 2 },
-      basePoints: 130,
+      profile: { move: 6, toughness: 4, save: 2, wounds: 6, leadership: 6, oc: 2, invulnerable: 4 },
+      basePoints: 120,
     }],
     weapons: [
-      { weaponId: 'boltPistol', isDefault: true, cost: 0 },
+      { weaponId: 'ferocity', isDefault: true, cost: 0 },
       { weaponId: 'swordOfTheHighMarshals', isDefault: true, cost: 0 },
     ],
     abilities: [
@@ -98,8 +108,8 @@ const BLACK_TEMPLARS_UNIQUE_UNITS: Unit[] = [
     keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'BLACK TEMPLARS', 'INFANTRY', 'CHARACTER', 'CHAPLAIN', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 6, toughness: 4, save: 2, wounds: 5, leadership: 8, oc: 1 },
-      basePoints: 100,
+      profile: { move: 6, toughness: 4, save: 3, wounds: 4, leadership: 6, oc: 1, invulnerable: 4 },
+      basePoints: 90,
     }],
     weapons: [
       { weaponId: 'boltPistol', isDefault: true, cost: 0 },
@@ -107,9 +117,14 @@ const BLACK_TEMPLARS_UNIQUE_UNITS: Unit[] = [
     ],
     abilities: [
       {
-        id: 'litany-of-censure',
-        name: 'Litany of Censure',
-        description: 'Once per battle, at the start of your Command phase, select one enemy unit within 12". Subtract 1 from its Leadership until the end of the turn.',
+        id: 'cenobyte-servitors',
+        name: 'Cenobyte Servitors',
+        description: 'While this model is leading a unit, models in that unit have the Feel No Pain 5+ ability.',
+      },
+      {
+        id: 'litany-of-devotion',
+        name: 'Litany of Devotion',
+        description: 'At the start of your Command phase, select one enemy unit within 12". That unit has the Fights First ability until the start of your next Command phase.',
       },
     ],
     notes: 'Powerful Chaplin with debuff abilities',
@@ -118,11 +133,11 @@ const BLACK_TEMPLARS_UNIQUE_UNITS: Unit[] = [
     id: 'emperor-s-champion',
     name: 'Emperor\'s Champion',
     role: 'hq',
-    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'BLACK TEMPLARS', 'INFANTRY', 'CHARACTER'],
+    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'BLACK TEMPLARS', 'INFANTRY', 'CHARACTER', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 6, toughness: 4, save: 2, wounds: 5, leadership: 7, oc: 1 },
-      basePoints: 70,
+      profile: { move: 8, toughness: 4, save: 2, wounds: 5, leadership: 6, oc: 1, invulnerable: 4 },
+      basePoints: 75,
     }],
     weapons: [
       { weaponId: 'boltPistol', isDefault: true, cost: 0 },
@@ -132,7 +147,7 @@ const BLACK_TEMPLARS_UNIQUE_UNITS: Unit[] = [
       {
         id: 'bastion-sword',
         name: 'Bastion of the Emperor',
-        description: 'Add 1 to the Attacks characteristic of the bearer\'s melee weapons.',
+        description: 'Melee weapons the bearer is equipped with have the Lethal Hits keyword.',
       },
     ],
     notes: 'Duelist character hunter',

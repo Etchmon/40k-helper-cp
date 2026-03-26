@@ -49,12 +49,12 @@ const BLOOD_ANGELS_UNIQUE_UNITS: Unit[] = [
       {
         models: 5,
         profile: { move: 6, toughness: 4, save: 3, wounds: 2, leadership: 6, oc: 1 },
-        basePoints: 95,
+        basePoints: 85,
       },
       {
         models: 10,
         profile: { move: 6, toughness: 4, save: 3, wounds: 2, leadership: 6, oc: 1 },
-        basePoints: 190,
+        basePoints: 160,
       },
     ],
     weapons: [
@@ -77,19 +77,19 @@ const BLOOD_ANGELS_UNIQUE_UNITS: Unit[] = [
     keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'BLOOD ANGELS', 'INFANTRY', 'JUMP PACK', 'FLY', 'SANGUINARY GUARD'],
     profiles: [
       {
-        models: 5,
-        profile: { move: 12, toughness: 4, save: 2, wounds: 3, leadership: 6, oc: 1 },
-        basePoints: 170,
+        models: 3,
+        profile: { move: 12, toughness: 4, save: 2, wounds: 3, leadership: 6, oc: 1, invulnerable: 4 },
+        basePoints: 110,
       },
       {
-        models: 10,
-        profile: { move: 12, toughness: 4, save: 2, wounds: 3, leadership: 6, oc: 1 },
-        basePoints: 340,
+        models: 6,
+        profile: { move: 12, toughness: 4, save: 2, wounds: 3, leadership: 6, oc: 1, invulnerable: 4 },
+        basePoints: 220,
       },
     ],
     weapons: [
-      { weaponId: 'sanguinarySpear', isDefault: true, cost: 0 },
-      { weaponId: 'powerFist', isDefault: false, cost: 10 },
+      { weaponId: 'angelusBoltgun', isDefault: true, cost: 0 },
+      { weaponId: 'sanguinarySpear', isDefault: false, cost: 0 },
       { weaponId: 'encarmineSword', isDefault: false, cost: 0 },
     ],
     abilities: [
@@ -122,12 +122,12 @@ const BLOOD_ANGELS_UNIQUE_UNITS: Unit[] = [
     ],
     abilities: [
       {
-        id: 'healing-lights',
+        id: 'healing-light',
         name: 'Healing Light',
         description: 'At the start of each of your Command phases, this model can heal up to D3 wounds for one friendly BLOOD ANGELS unit within 6".',
       },
     ],
-    notes: ' Chaplin with healing abilities',
+    notes: 'Chaplain with healing abilities',
   },
   {
     id: 'mephiston',
@@ -136,8 +136,8 @@ const BLOOD_ANGELS_UNIQUE_UNITS: Unit[] = [
     keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'BLOOD ANGELS', 'INFANTRY', 'CHARACTER', 'PSYKER', 'LIBRARIAN', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 8, toughness: 5, save: 2, wounds: 6, leadership: 7, oc: 1 },
-      basePoints: 115,
+      profile: { move: 7, toughness: 5, save: 2, wounds: 6, leadership: 6, oc: 1, invulnerable: 5 },
+      basePoints: 120,
     }],
     weapons: [
       { weaponId: 'plasmaPistol', isDefault: true, cost: 0 },
@@ -145,9 +145,14 @@ const BLOOD_ANGELS_UNIQUE_UNITS: Unit[] = [
     ],
     abilities: [
       {
-        id: 'blood-revival',
-        name: 'Blood Revitalising',
-        description: 'Once per battle, at the start of your Command phase, this model can restore D3 wounds to itself.',
+        id: 'the-quickening',
+        name: 'The Quickening',
+        description: 'While this model is leading a unit, models in that unit have the Fights First ability.',
+      },
+      {
+        id: 'transfixing-gaze',
+        name: 'Transfixing Gaze',
+        description: 'At the end of your Command phase, select one enemy unit within 12". Until the start of your next Command phase, subtract 1 from the Leadership characteristic of that unit.',
       },
     ],
     notes: 'Powerful Librarian with special abilities',
@@ -159,21 +164,25 @@ const BLOOD_ANGELS_UNIQUE_UNITS: Unit[] = [
     keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'BLOOD ANGELS', 'INFANTRY', 'CHARACTER', 'CHAPLAIN', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 12, toughness: 4, save: 3, wounds: 5, leadership: 8, oc: 1 },
-      basePoints: 90,
+      profile: { move: 12, toughness: 4, save: 2, wounds: 5, leadership: 6, oc: 1, invulnerable: 4 },
+      basePoints: 95,
     }],
     weapons: [
-      { weaponId: 'boltPistol', isDefault: true, cost: 0 },
-      { weaponId: 'croziusArcanum', isDefault: true, cost: 0 },
+      { weaponId: 'executionerAxe', isDefault: true, cost: 0 },
     ],
     abilities: [
       {
-        id: 'litanies-of-destruction',
-        name: 'Litanies of Destruction',
-        description: 'Add 1 to the Damage characteristic of melee weapons equipped by models in friendly BLOOD ANGELS units within 6".',
+        id: 'redeemer-of-the-lost',
+        name: 'Redeemer of the Lost',
+        description: 'At the start of your Command phase, select one friendly BLOOD ANGELS unit within 12". That unit has the Fights First ability until the start of your next Command phase.',
+      },
+      {
+        id: 'mass-of-doom',
+        name: 'Mass of Doom',
+        description: 'While this model is leading a unit, models in that unit have the Fights First ability.',
       },
     ],
-    notes: 'Cl Chaplin of the Death Company',
+    notes: 'Chaplain of the Death Company',
   },
 ];
 
@@ -270,7 +279,7 @@ export const bloodAngels: Faction = {
   keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'BLOOD ANGELS'],
   armyRule: {
     type: 'oath-of-moment',
-    oathOfMoment: { rerollHits: true, bonusToWound: true }
+    oathOfMoment: { rerollHits: true, bonusToWound: false }
   },
   units: [...SHARED_UNITS, ...BLOOD_ANGELS_UNIQUE_UNITS],
   detachments: [...GENERIC_DETACHMENTS, ...BLOOD_ANGELS_DETACHMENTS],

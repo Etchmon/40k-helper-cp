@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { useGame, usePlayerSetup } from '@/lib/game/store';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -15,7 +15,7 @@ export function ArmyBuilderStep({ currentPlayer, onNext, onBack }: ArmyBuilderSt
   const { state, dispatch } = useGame();
   const { setup, faction, validation } = usePlayerSetup(currentPlayer);
   const maxPoints = POINTS_BY_SIZE[state.settings.gameSize];
-  const [expandedRoles, setExpandedRoles] = useState<Set<string>>(new Set(['hq', 'troops']));
+  const [expandedRoles, setExpandedRoles] = useState<Set<string>>(new Set(['characters', 'hq', 'troops']));
 
   const playerName = state.players[currentPlayer - 1].name || `Player ${currentPlayer}`;
 
@@ -51,8 +51,24 @@ export function ArmyBuilderStep({ currentPlayer, onNext, onBack }: ArmyBuilderSt
     }
   };
 
+  const allUnitsInFaction = useMemo(() => {
+    if (!faction) return [];
+    const unitMap = new Map();
+    for (const unit of faction.units || []) {
+      if (!unitMap.has(unit.id)) {
+        unitMap.set(unit.id, unit);
+      }
+    }
+    for (const unit of faction.uniqueUnits || []) {
+      if (!unitMap.has(unit.id)) {
+        unitMap.set(unit.id, unit);
+      }
+    }
+    return Array.from(unitMap.values());
+  }, [faction]);
+
   const unitsByRole = ROLE_ORDER.reduce((acc, role) => {
-    acc[role] = faction?.units.filter(u => u.role === role) || [];
+    acc[role] = allUnitsInFaction.filter(u => u.role === role);
     return acc;
   }, {} as Record<string, Unit[]>);
 
@@ -72,12 +88,12 @@ export function ArmyBuilderStep({ currentPlayer, onNext, onBack }: ArmyBuilderSt
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card className="max-h-[600px] overflow-hidden flex flex-col">
-          <CardHeader className="bg-surface0/50">
-            <CardTitle>Unit Roster</CardTitle>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6">
+        <Card className="max-h-[400px] md:max-h-[500px] lg:max-h-[600px] overflow-hidden flex flex-col">
+          <CardHeader className="bg-surface0/50 py-3 md:py-4 px-3 md:px-4">
+            <CardTitle className="text-base md:text-lg">Unit Roster</CardTitle>
           </CardHeader>
-          <CardContent className="flex-1 overflow-y-auto p-4">
+          <CardContent className="flex-1 overflow-y-auto p-2 md:p-4">
             {setup.army.length === 0 ? (
               <div className="text-center text-subtext0 py-8">
                 No units added yet. Select units from the right.
@@ -85,39 +101,40 @@ export function ArmyBuilderStep({ currentPlayer, onNext, onBack }: ArmyBuilderSt
             ) : (
               <div className="space-y-2">
                 {setup.army.map((armyUnit) => {
-                  const unit = faction?.units.find(u => u.id === armyUnit.unitId);
+                  const unit = allUnitsInFaction.find(u => u.id === armyUnit.unitId);
                   if (!unit) return null;
-                  const unitPoints = unit.profiles[0].basePoints * armyUnit.quantity;
+                  const basePoints = unit.profiles?.[0]?.basePoints ?? 0;
+                  const unitPoints = basePoints * armyUnit.quantity;
                   return (
                     <div
                       key={armyUnit.unitId}
-                      className="flex items-center justify-between p-3 bg-surface0/50 rounded-lg"
+                      className="flex items-center justify-between p-2 md:p-3 bg-surface0/50 rounded-lg"
                     >
-                      <div className="flex-1">
-                        <div className="font-medium text-text">{unit.name}</div>
-                        <div className="text-sm text-subtext0">
-                          {armyUnit.quantity} x {unitPoints} pts
+                      <div className="flex-1 min-w-0">
+                        <div className="font-medium text-text text-sm truncate">{unit.name}</div>
+                        <div className="text-xs md:text-sm text-subtext0">
+                          {armyUnit.quantity} × {unitPoints} pts
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1 md:gap-2">
                         <button
                           onClick={() => handleUpdateQuantity(armyUnit.unitId, armyUnit.quantity - 1)}
-                          className="p-1 rounded hover:bg-surface1"
+                          className="p-1.5 rounded hover:bg-surface1 touch-manipulation"
                         >
-                          <Minus className="w-4 h-4" />
+                          <Minus className="w-3 h-3 md:w-4 md:h-4" />
                         </button>
-                        <span className="w-8 text-center font-mono">{armyUnit.quantity}</span>
+                        <span className="w-6 md:w-8 text-center font-mono text-sm">{armyUnit.quantity}</span>
                         <button
                           onClick={() => handleUpdateQuantity(armyUnit.unitId, armyUnit.quantity + 1)}
-                          className="p-1 rounded hover:bg-surface1"
+                          className="p-1.5 rounded hover:bg-surface1 touch-manipulation"
                         >
-                          <Plus className="w-4 h-4" />
+                          <Plus className="w-3 h-3 md:w-4 md:h-4" />
                         </button>
                         <button
                           onClick={() => handleRemoveUnit(armyUnit.unitId)}
-                          className="p-1 rounded hover:bg-red/20 text-red"
+                          className="p-1.5 rounded hover:bg-red/20 text-red touch-manipulation"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Trash2 className="w-3 h-3 md:w-4 md:h-4" />
                         </button>
                       </div>
                     </div>
@@ -128,14 +145,132 @@ export function ArmyBuilderStep({ currentPlayer, onNext, onBack }: ArmyBuilderSt
           </CardContent>
         </Card>
 
-        <Card className="max-h-[600px] overflow-hidden flex flex-col">
-          <CardHeader className="bg-surface0/50">
-            <CardTitle>Available Units</CardTitle>
+        <Card className="max-h-[400px] md:max-h-[500px] lg:max-h-[600px] overflow-hidden flex flex-col">
+          <CardHeader className="bg-surface0/50 py-3 md:py-4 px-3 md:px-4">
+            <CardTitle className="text-base md:text-lg">Available Units</CardTitle>
           </CardHeader>
           <CardContent className="flex-1 overflow-y-auto p-4">
             <div className="space-y-3">
-              {ROLE_ORDER.map((role) => {
-                const units = unitsByRole[role];
+              {/* Characters Section - Only named characters (EPIC HERO), not generic HQ */}
+              {(() => {
+                const characterUnits = allUnitsInFaction.filter(u => 
+                  u.keywords?.includes('CHARACTER') && u.keywords?.includes('EPIC HERO')
+                );
+                if (characterUnits.length === 0) return null;
+                const isExpanded = expandedRoles.has('characters');
+                
+                return (
+                  <div className="border border-mauve/30 rounded-lg overflow-hidden">
+                    <button
+                      onClick={() => toggleRole('characters')}
+                      className="w-full flex items-center justify-between p-3 bg-mauve/10 hover:bg-mauve/20 transition-colors"
+                    >
+                      <span className="font-medium text-mauve">⚡ Characters</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-mauve/80">{characterUnits.length} units</span>
+                        {isExpanded ? (
+                          <ChevronUp className="w-4 h-4" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4" />
+                        )}
+                      </div>
+                    </button>
+                    {isExpanded && (
+                      <div className="p-2 space-y-1">
+                        {characterUnits.map((unit) => {
+                          const isAdded = setup.army.some(u => u.unitId === unit.id);
+                          return (
+                            <div
+                              key={unit.id}
+                              className={`flex items-center justify-between p-2 rounded ${
+                                isAdded ? 'bg-mauve/20' : 'bg-surface1/50 hover:bg-surface1'
+                              }`}
+                            >
+                              <div className="flex-1 min-w-0">
+                                <div className="font-medium text-sm text-text truncate">
+                                  {unit.name}
+                                </div>
+                                <div className="text-xs text-subtext0 font-mono">
+                                  {unit.profiles[0].basePoints} pts
+                                </div>
+                              </div>
+                              <Button
+                                size="sm"
+                                variant={isAdded ? 'ghost' : 'default'}
+                                onClick={() => handleAddUnit(unit)}
+                                disabled={isAdded}
+                              >
+                                {isAdded ? 'Added' : 'Add'}
+                              </Button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+              
+              {/* HQ Units - non-Epic Hero HQ units (generic CHARACTERs only) */}
+              {(() => {
+                const hqUnits = allUnitsInFaction.filter(u => u.role === 'hq' && !u.keywords?.includes('EPIC HERO'));
+                if (hqUnits.length === 0) return null;
+                const isExpanded = expandedRoles.has('hq');
+                
+                return (
+                  <div className="border border-surface0 rounded-lg overflow-hidden">
+                    <button
+                      onClick={() => toggleRole('hq')}
+                      className="w-full flex items-center justify-between p-3 bg-surface0/50 hover:bg-surface0 transition-colors"
+                    >
+                      <span className="font-medium text-text">HQ Units</span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-subtext0">{hqUnits.length} units</span>
+                        {isExpanded ? (
+                          <ChevronUp className="w-4 h-4" />
+                        ) : (
+                          <ChevronDown className="w-4 h-4" />
+                        )}
+                      </div>
+                    </button>
+                    {isExpanded && (
+                      <div className="p-2 space-y-1">
+                        {hqUnits.map((unit) => {
+                          const isAdded = setup.army.some(u => u.unitId === unit.id);
+                          return (
+                            <div
+                              key={unit.id}
+                              className={`flex items-center justify-between p-2 rounded ${
+                                isAdded ? 'bg-mauve/20' : 'bg-surface1/50 hover:bg-surface1'
+                              }`}
+                            >
+                              <div className="flex-1 min-w-0">
+                                <div className="font-medium text-sm text-text truncate">
+                                  {unit.name}
+                                </div>
+                                <div className="text-xs text-subtext0 font-mono">
+                                  {unit.profiles[0].basePoints} pts
+                                </div>
+                              </div>
+                              <Button
+                                size="sm"
+                                variant={isAdded ? 'ghost' : 'default'}
+                                onClick={() => handleAddUnit(unit)}
+                                disabled={isAdded}
+                              >
+                                {isAdded ? 'Added' : 'Add'}
+                              </Button>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })()}
+              
+              {ROLE_ORDER.filter(role => role !== 'hq').map((role) => {
+                const units = unitsByRole[role].filter(u => !u.keywords?.includes('CHARACTER'));
                 if (units.length === 0) return null;
                 const isExpanded = expandedRoles.has(role);
 

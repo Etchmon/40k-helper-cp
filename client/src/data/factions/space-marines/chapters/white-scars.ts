@@ -1,6 +1,32 @@
-import { Faction, Detachment } from '../../../../types/game';
+import { Faction, Unit, Detachment } from '../../../../types/game';
 import { SHARED_UNITS } from '../shared/units';
 import { GENERIC_DETACHMENTS } from '../detachments/generic';
+
+const WHITE_SCAR_UNIQUE_UNITS: Unit[] = [
+  {
+    id: 'kor-sarro-khan',
+    name: "Kor'Sarro Khan",
+    role: 'hq',
+    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'WHITE SCARS', 'INFANTRY', 'CHARACTER', 'CHAPTER MASTER', 'EPIC HERO'],
+    profiles: [{
+      models: 1,
+      profile: { move: 6, toughness: 4, save: 3, wounds: 5, leadership: 6, oc: 1, invulnerable: 4 },
+      basePoints: 70,
+    }],
+    weapons: [
+      { weaponId: 'boltPistol', isDefault: true, cost: 0 },
+      { weaponId: 'moonfang', isDefault: true, cost: 0 },
+    ],
+    abilities: [
+      {
+        id: 'master-of-siegecraft',
+        name: 'Master of Siegecraft',
+        description: 'While the bearer is leading a unit, models in that unit have the Precision keyword.',
+      },
+    ],
+    notes: 'Master of the hunt',
+  },
+];
 
 const WHITE_SCAR_DETACHMENTS: Detachment[] = [
   {
@@ -65,8 +91,8 @@ export const whiteScars: Faction = {
     type: 'oath-of-moment',
     oathOfMoment: { rerollHits: true, bonusToWound: true }
   },
-  units: [...SHARED_UNITS],
+  units: [...SHARED_UNITS, ...WHITE_SCAR_UNIQUE_UNITS],
   detachments: [...GENERIC_DETACHMENTS, ...WHITE_SCAR_DETACHMENTS],
-  uniqueUnits: [],
+  uniqueUnits: [...WHITE_SCAR_UNIQUE_UNITS],
   uniqueDetachments: [...WHITE_SCAR_DETACHMENTS],
 };

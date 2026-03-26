@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { useGame, usePlayerSetup } from '@/lib/game/store';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -21,7 +22,11 @@ export function DetachmentStep({ currentPlayer, onNext, onBack }: DetachmentStep
   };
 
   const handleSetWarlord = (warlordId: string) => {
-    dispatch({ type: 'SET_WARLORD', payload: { player: currentPlayer, warlordId } });
+    if (warlordId === '') {
+      dispatch({ type: 'SET_WARLORD', payload: { player: currentPlayer, warlordId: null } });
+    } else {
+      dispatch({ type: 'SET_WARLORD', payload: { player: currentPlayer, warlordId } });
+    }
   };
 
   const handleToggleEnhancement = (enhancementId: string) => {
@@ -36,8 +41,24 @@ export function DetachmentStep({ currentPlayer, onNext, onBack }: DetachmentStep
     dispatch({ type: 'SET_TEMPLAR_VOW', payload: { player: currentPlayer, vowId } });
   };
 
-  const warlordOptions = faction?.units.filter(
-    u => u.keywords.includes('CHARACTER') && setup.army.some(au => au.unitId === u.id)
+  const allUnitsInFaction = useMemo(() => {
+    if (!faction) return [];
+    const unitMap = new Map();
+    for (const unit of faction.units || []) {
+      if (!unitMap.has(unit.id)) {
+        unitMap.set(unit.id, unit);
+      }
+    }
+    for (const unit of faction.uniqueUnits || []) {
+      if (!unitMap.has(unit.id)) {
+        unitMap.set(unit.id, unit);
+      }
+    }
+    return Array.from(unitMap.values());
+  }, [faction]);
+
+  const warlordOptions = allUnitsInFaction.filter(
+    u => u.keywords?.includes('CHARACTER') && setup.army.some(au => au.unitId === u.id)
   ) || [];
 
   const selectedDetachment = faction?.detachments.find(d => d.id === setup.detachmentId);
@@ -173,36 +194,46 @@ export function DetachmentStep({ currentPlayer, onNext, onBack }: DetachmentStep
 
       <Card>
         <CardHeader>
-          <CardTitle>Designate Warlord</CardTitle>
-          <CardDescription>Select a Character unit as your Warlord</CardDescription>
+          <CardTitle>Designate Warlord (Optional)</CardTitle>
+          <CardDescription>Select a Character unit as your Warlord. This is optional - your army can still be led without one.</CardDescription>
         </CardHeader>
         <CardContent>
-          {warlordOptions.length === 0 ? (
-            <div className="text-center text-subtext0 py-4">
-              Add Character units to your army first
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {warlordOptions.map((unit) => {
-                const isSelected = setup.warlordId === unit.id;
-                return (
-                  <button
-                    key={unit.id}
-                    onClick={() => handleSetWarlord(unit.id)}
-                    className={`p-3 rounded-lg border-2 text-left transition-all ${
-                      isSelected
-                        ? 'border-mauve bg-mauve/10'
-                        : 'border-surface0 bg-surface0/50 hover:border-surface1'
-                    }`}
-                  >
-                    <div className="font-medium text-text">{unit.name}</div>
-                    <div className="text-sm text-subtext0 font-mono">
-                      {unit.profiles[0].basePoints} pts
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <button
+              onClick={() => handleSetWarlord('')}
+              className={`p-3 rounded-lg border-2 text-left transition-all ${
+                !setup.warlordId
+                  ? 'border-mauve bg-mauve/10'
+                  : 'border-surface0 bg-surface0/50 hover:border-surface1'
+              }`}
+            >
+              <div className="font-medium text-text">No Warlord</div>
+              <div className="text-sm text-subtext0">Continue without a warlord</div>
+            </button>
+            {warlordOptions.map((unit) => {
+              const isSelected = setup.warlordId === unit.id;
+              return (
+                <button
+                  key={unit.id}
+                  onClick={() => handleSetWarlord(unit.id)}
+                  className={`p-3 rounded-lg border-2 text-left transition-all ${
+                    isSelected
+                      ? 'border-mauve bg-mauve/10'
+                      : 'border-surface0 bg-surface0/50 hover:border-surface1'
+                  }`}
+                >
+                  <div className="font-medium text-text">{unit.name}</div>
+                  <div className="text-sm text-subtext0 font-mono">
+                    {unit.profiles[0].basePoints} pts
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+          {warlordOptions.length === 0 && (
+            <p className="text-xs text-overlay1 mt-3 text-center">
+              Add Character units to your army to select a specific Warlord
+            </p>
           )}
         </CardContent>
       </Card>
@@ -213,7 +244,7 @@ export function DetachmentStep({ currentPlayer, onNext, onBack }: DetachmentStep
         </Button>
         <Button
           onClick={onNext}
-          disabled={!setup.detachmentId || !setup.warlordId || (isBlackTemplars && !setup.templarVow)}
+          disabled={!setup.detachmentId || (isBlackTemplars && !setup.templarVow)}
         >
           {currentPlayer === 1 ? 'Next: Player 2' : 'Next: Mission'}
         </Button>

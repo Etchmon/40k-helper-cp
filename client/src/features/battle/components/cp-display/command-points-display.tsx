@@ -62,7 +62,7 @@ export function CPTracker({ className = '' }: CPTrackerProps) {
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-12 h-12 rounded-lg bg-surface0 border border-surface2 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-command">{player1CP}</span>
+                  <span className="text-2xl font-bold text-yellow">{player1CP}</span>
                 </div>
                 <span className="text-xs text-subtext0">CP</span>
               </div>
@@ -82,7 +82,7 @@ export function CPTracker({ className = '' }: CPTrackerProps) {
               </div>
               <div className="flex items-center gap-2">
                 <div className="w-12 h-12 rounded-lg bg-surface0 border border-surface2 flex items-center justify-center">
-                  <span className="text-2xl font-bold text-command">{player2CP}</span>
+                  <span className="text-2xl font-bold text-yellow">{player2CP}</span>
                 </div>
                 <span className="text-xs text-subtext0">CP</span>
               </div>

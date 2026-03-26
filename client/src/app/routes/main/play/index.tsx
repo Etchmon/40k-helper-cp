@@ -5,21 +5,25 @@ import { VPTracker } from './vp-tracker';
 import { CPTracker } from '@/features/battle/components/cp-display';
 import { StratagemPanel } from '@/features/battle/components/stratagem-panel';
 import { UnitAbilityPanel } from '@/features/battle/components/unit-ability-panel';
+import { ArmyUnitList } from '@/features/battle/components/army-unit-list';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Crown, LogOut, Save, RotateCcw, Menu, X, Target, Scroll, Trophy } from 'lucide-react';
+import { LogOut, Save, RotateCcw, Menu, X, Target, Scroll, Trophy, Plus, Minus } from 'lucide-react';
 import { getMissionById } from '@/data/missions/only-war';
 import { useNavigate } from 'react-router-dom';
 import { confirm } from '@/components/ui/confirm-dialog';
 import { useToast } from '@/hooks/use-toast';
 
 export function GameBoard() {
-  const { state, saveGame } = useGame();
+  const { state, dispatch, saveGame } = useGame();
   const { toast } = useToast();
   const navigate = useNavigate();
   const [showMobileMenu, setShowMobileMenu] = useState(false);
 
   const mission = getMissionById(state.settings.missionId);
+  const activePlayer = state.turn.activePlayer;
+  const player1CP = state.battle.commandPoints.current[0] ?? 0;
+  const player2CP = state.battle.commandPoints.current[1] ?? 0;
 
   useEffect(() => {
     if (state.status === 'finished') {
@@ -63,63 +67,64 @@ export function GameBoard() {
   }, [saveGame, toast]);
 
   return (
-    <div className="min-h-screen bg-crust pb-24 lg:pb-6">
+    <div className="min-h-screen bg-crust lg:pb-0">
       {/* Mobile Header */}
-      <header className="lg:hidden bg-surface0/95 border-b border-surface1 sticky top-0 z-20 backdrop-blur-md safe-area-inset-top">
+      <header className="lg:hidden bg-crust/95 border-b border-surface0 sticky top-0 z-20 backdrop-blur-md safe-area-inset-top">
         <div className="px-4 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <div className="flex flex-col items-center min-w-[50px]">
-                <span className="text-[10px] text-subtext0 uppercase tracking-wider">Round</span>
-                <span className="text-3xl font-bold text-mauve leading-none">{state.turn.round}</span>
+              <div className="flex flex-col items-center min-w-[40px]">
+                <span className="text-[10px] text-overlay1 uppercase tracking-wider">Rnd</span>
+                <span className="text-2xl font-bold text-mauve leading-none">{state.turn.round}</span>
               </div>
-              <div className="w-px h-10 bg-surface1" />
+              <div className="w-px h-8 bg-surface0" />
               <div className="flex flex-col">
-                <span className="text-[10px] text-subtext0 uppercase tracking-wider">Turn</span>
-                <span className="text-base font-semibold text-text truncate max-w-[140px]">
-                  {state.players[state.turn.activePlayer - 1].name || `P${state.turn.activePlayer}`}
+                <span className="text-[10px] text-overlay1 uppercase tracking-wider">Turn</span>
+                <span className="text-sm font-semibold text-text truncate max-w-[100px]">
+                  {state.players[activePlayer - 1]?.name || `P${activePlayer}`}
                 </span>
               </div>
             </div>
             
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-2">
+              {/* Mobile VP & CP Display */}
+              <div className="flex items-center gap-3 text-xs">
+                <div className="flex items-center gap-1">
+                  <span className="text-blue font-bold">{state.battle.victoryPoints[0] ?? 0}</span>
+                  <span className="text-overlay1">VP</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-yellow font-bold">{player1CP}</span>
+                  <span className="text-surface1 text-xs">CP</span>
+                </div>
+                <span className="text-surface0">|</span>
+                <div className="flex items-center gap-1">
+                  <span className="text-yellow font-bold">{player2CP}</span>
+                  <span className="text-surface1 text-xs">CP</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <span className="text-red font-bold">{state.battle.victoryPoints[1] ?? 0}</span>
+                  <span className="text-overlay1">VP</span>
+                </div>
+              </div>
               <Button
                 variant="ghost"
                 size="icon-sm"
                 onClick={() => setShowMobileMenu(!showMobileMenu)}
-                className="lg:hidden"
               >
                 {showMobileMenu ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </Button>
             </div>
           </div>
-          
-          {/* Mobile VP Bar */}
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-surface1">
-            <div className="flex items-center gap-2 text-sm">
-              <span className="text-text font-medium truncate max-w-[100px]">
-                {state.players[0]?.name || 'P1'}
-              </span>
-              <span className="font-bold text-blue">{state.battle.victoryPoints[0]}</span>
-              <span className="text-subtext0">VP</span>
-            </div>
-            <div className="flex items-center gap-2 text-sm">
-              <span className="font-bold text-red">{state.battle.victoryPoints[1]}</span>
-              <span className="text-subtext0">VP</span>
-              <span className="text-text font-medium truncate max-w-[100px]">
-                {state.players[1]?.name || 'P2'}
-              </span>
-            </div>
-          </div>
         </div>
 
-          {/* Mobile Menu Dropdown */}
+        {/* Mobile Menu Dropdown */}
         {showMobileMenu && (
-          <div className="absolute left-0 right-0 bg-surface0/98 border-b border-surface1 px-4 py-4 space-y-2 z-30">
+          <div className="absolute left-0 right-0 bg-crust border-b border-surface0 px-4 py-4 space-y-2 z-30">
             <Button
               variant="ghost"
               onClick={() => { handleSave(); setShowMobileMenu(false); }}
-              className="w-full justify-start text-base"
+              className="w-full justify-start text-base hover:bg-surface0"
             >
               <Save className="w-5 h-5 mr-3" />
               Save Game
@@ -127,7 +132,7 @@ export function GameBoard() {
             <Button
               variant="ghost"
               onClick={() => { handleNewGame(); setShowMobileMenu(false); }}
-              className="w-full justify-start text-base"
+              className="w-full justify-start text-base hover:bg-surface0"
             >
               <RotateCcw className="w-5 h-5 mr-3" />
               New Game
@@ -135,7 +140,7 @@ export function GameBoard() {
             <Button
               variant="ghost"
               onClick={() => { handleQuit(); setShowMobileMenu(false); }}
-              className="w-full justify-start text-base text-red"
+              className="w-full justify-start text-base text-red hover:bg-surface0"
             >
               <LogOut className="w-5 h-5 mr-3" />
               End Game
@@ -144,86 +149,142 @@ export function GameBoard() {
         )}
       </header>
 
-      {/* Desktop Header */}
-      <header className="hidden lg:block bg-surface0/80 border-b border-surface1 sticky top-0 z-10 backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+      {/* Desktop Header - Full Info Bar */}
+      <header className="hidden lg:block bg-crust/95 border-b border-surface0 sticky top-0 z-10 backdrop-blur-sm">
+        <div className="max-w-[1600px] mx-auto px-4 py-2">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-8">
-              <div className="flex items-center gap-4">
-                <div className="flex flex-col items-center min-w-[60px]">
-                  <span className="text-xs text-subtext0 uppercase tracking-wide">Round</span>
-                  <span className="text-3xl font-bold text-mauve">{state.turn.round}</span>
+            {/* Left: Round, Turn, Player */}
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <div className="flex flex-col items-center">
+                  <span className="text-[9px] text-overlay1 uppercase tracking-wider">Round</span>
+                  <span className="text-xl font-bold text-mauve leading-none">{state.turn.round}</span>
                 </div>
-                <div className="h-12 w-px bg-surface1" />
-                <div className="flex flex-col">
-                  <span className="text-xs text-subtext0 uppercase tracking-wide">Turn</span>
-                  <span className="text-xl font-semibold text-text">
-                    {state.players[state.turn.activePlayer - 1].name || `Player ${state.turn.activePlayer}`}
-                  </span>
-                </div>
+              </div>
+              <div className="h-6 w-px bg-surface0" />
+              <div className="flex flex-col">
+                <span className="text-[9px] text-overlay1 uppercase tracking-wider">Turn</span>
+                <span className="text-sm font-semibold text-text">
+                  {state.players[activePlayer - 1]?.name || `Player ${activePlayer}`}
+                </span>
               </div>
             </div>
             
+            {/* Center: VP & CP for both players with +/- controls */}
+            <div className="flex items-center gap-6">
+              {/* Player 1 */}
+              <div className="flex items-center gap-3">
+                <span className="text-sm font-medium text-blue w-20 truncate">{state.players[0]?.name || 'P1'}</span>
+                
+                {/* VP with controls */}
+                <div className="flex items-center gap-1">
+                  <Button variant="ghost" size="icon-sm" className="h-6 w-6" onClick={() => {
+                    dispatch({ type: 'ADD_VP', payload: { player: 1, points: -1, reason: 'Manual' }});
+                  }}><Minus className="w-3 h-3" /></Button>
+                  <div className="flex items-center gap-1 px-2 py-0.5 bg-blue/10 rounded border border-blue/30 min-w-[36px] justify-center">
+                    <span className="text-base font-bold text-blue">{state.battle.victoryPoints[0] ?? 0}</span>
+                    <span className="text-[9px] text-overlay1">VP</span>
+                  </div>
+                  <Button variant="ghost" size="icon-sm" className="h-6 w-6" onClick={() => {
+                    dispatch({ type: 'ADD_VP', payload: { player: 1, points: 1, reason: 'Manual' }});
+                  }}><Plus className="w-3 h-3" /></Button>
+                </div>
+                
+                {/* CP with controls */}
+                <div className="flex items-center gap-1">
+                  <Button variant="ghost" size="icon-sm" className="h-6 w-6" onClick={() => {
+                    if (player1CP > 0) dispatch({ type: 'SPEND_CP', payload: { player: 1, amount: 1, reason: 'Manual' }});
+                  }}><Minus className="w-3 h-3" /></Button>
+                  <div className="flex items-center gap-1 px-2 py-0.5 bg-yellow/10 rounded border border-yellow/30 min-w-[36px] justify-center">
+                    <span className="text-base font-bold text-yellow">{player1CP}</span>
+                    <span className="text-[9px] text-surface1">CP</span>
+                  </div>
+                  <Button variant="ghost" size="icon-sm" className="h-6 w-6" onClick={() => {
+                    dispatch({ type: 'GAIN_CP', payload: { player: 1, amount: 1, reason: 'Manual' }});
+                  }}><Plus className="w-3 h-3" /></Button>
+                </div>
+              </div>
+
+              <span className="text-surface0 text-xs">||</span>
+
+              {/* Player 2 */}
+              <div className="flex items-center gap-3">
+                {/* CP with controls */}
+                <div className="flex items-center gap-1">
+                  <Button variant="ghost" size="icon-sm" className="h-6 w-6" onClick={() => {
+                    if (player2CP > 0) dispatch({ type: 'SPEND_CP', payload: { player: 2, amount: 1, reason: 'Manual' }});
+                  }}><Minus className="w-3 h-3" /></Button>
+                  <div className="flex items-center gap-1 px-2 py-0.5 bg-yellow/10 rounded border border-yellow/30 min-w-[36px] justify-center">
+                    <span className="text-base font-bold text-yellow">{player2CP}</span>
+                    <span className="text-[9px] text-surface1">CP</span>
+                  </div>
+                  <Button variant="ghost" size="icon-sm" className="h-6 w-6" onClick={() => {
+                    dispatch({ type: 'GAIN_CP', payload: { player: 2, amount: 1, reason: 'Manual' }});
+                  }}><Plus className="w-3 h-3" /></Button>
+                </div>
+                
+                {/* VP with controls */}
+                <div className="flex items-center gap-1">
+                  <Button variant="ghost" size="icon-sm" className="h-6 w-6" onClick={() => {
+                    dispatch({ type: 'ADD_VP', payload: { player: 2, points: -1, reason: 'Manual' }});
+                  }}><Minus className="w-3 h-3" /></Button>
+                  <div className="flex items-center gap-1 px-2 py-0.5 bg-red/10 rounded border border-red/30 min-w-[36px] justify-center">
+                    <span className="text-base font-bold text-red">{state.battle.victoryPoints[1] ?? 0}</span>
+                    <span className="text-[9px] text-overlay1">VP</span>
+                  </div>
+                  <Button variant="ghost" size="icon-sm" className="h-6 w-6" onClick={() => {
+                    dispatch({ type: 'ADD_VP', payload: { player: 2, points: 1, reason: 'Manual' }});
+                  }}><Plus className="w-3 h-3" /></Button>
+                </div>
+                
+                <span className="text-sm font-medium text-red w-20 text-right truncate">{state.players[1]?.name || 'P2'}</span>
+              </div>
+            </div>
+
+            {/* Right: Mission + Actions */}
             <div className="flex items-center gap-3">
-              <Button
-                variant="outline"
-                onClick={handleNewGame}
-                title="New Game"
-              >
-                <RotateCcw className="w-5 h-5 mr-2" />
-                New Game
+              <div className="flex items-center gap-2 px-3 py-1 bg-surface0/50 rounded-lg border border-surface1">
+                <Target className="w-4 h-4 text-mauve" />
+                <span className="text-sm text-subtext0">{mission?.name || 'Unknown'}</span>
+              </div>
+              <Button variant="outline" size="sm" className="h-8" onClick={handleNewGame}>
+                <RotateCcw className="w-3 h-3 mr-1" />
+                <span className="text-xs">New</span>
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleSave}
-                title="Save Game"
-              >
-                <Save className="w-5 h-5" />
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleSave}>
+                <Save className="w-4 h-4" />
               </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={handleQuit}
-                title="End Game"
-              >
-                <LogOut className="w-5 h-5" />
+              <Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleQuit}>
+                <LogOut className="w-4 h-4" />
               </Button>
             </div>
-          </div>
-          
-          <div className="flex items-center gap-4 mt-3 text-sm text-subtext0">
-            <span>
-              <span className="text-text font-medium">{state.players[0]?.name || 'Player 1'}</span>: <span className="text-blue font-bold">{state.battle.victoryPoints[0]}</span> VP
-            </span>
-            <span className="text-surface1">|</span>
-            <span>
-              <span className="text-text font-medium">{state.players[1]?.name || 'Player 2'}</span>: <span className="text-red font-bold">{state.battle.victoryPoints[1]}</span> VP
-            </span>
-            <span className="text-surface1">|</span>
-            <span className="font-medium">{mission?.name || 'Unknown Mission'}</span>
           </div>
         </div>
       </header>
 
-      {/* Desktop Main Content */}
-      <main className="hidden lg:block max-w-7xl mx-auto px-6 py-6">
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-          <div className="xl:col-span-1 space-y-4">
+      {/* Desktop Main Content - Single Page Layout */}
+      <main className="hidden lg:flex lg:flex-col max-w-[1600px] mx-auto px-2 py-2" style={{ height: 'calc(100vh - 60px)' }}>
+        {/* Top: Phase + Selected Unit + Stratagems */}
+        <div className="grid grid-cols-3 gap-2" style={{ height: '56%' }}>
+          {/* Left: Phase Panel */}
+          <div className="overflow-hidden h-full">
             <PhasePanel />
+          </div>
+          
+          {/* Middle: Selected Unit */}
+          <div className="overflow-hidden h-full">
             <UnitAbilityPanel />
           </div>
-          <div className="xl:col-span-1 space-y-4">
-            <MissionCard mission={mission} />
-            <WarlordCard />
-          </div>
-          <div className="xl:col-span-1 space-y-4">
+          
+          {/* Right: Stratagems */}
+          <div className="overflow-hidden h-full">
             <StratagemPanel />
-            <div className="grid grid-cols-2 gap-4">
-              <CPTracker />
-              <VPTracker />
-            </div>
           </div>
+        </div>
+
+        {/* Bottom: Army Unit List - fills remaining space */}
+        <div className="mt-2" style={{ height: '42%' }}>
+          <ArmyUnitList horizontal />
         </div>
       </main>
 
@@ -277,6 +338,7 @@ function MobileGameInterface() {
           <div className="space-y-4">
             <PhasePanel />
             <UnitAbilityPanel />
+            <ArmyUnitList />
           </div>
         )}
         
@@ -291,7 +353,6 @@ function MobileGameInterface() {
               <CPTracker />
             </div>
             <MissionCardSummary />
-            <WarlordCard />
           </div>
         )}
       </div>
@@ -311,58 +372,6 @@ function MissionCardSummary() {
       </CardHeader>
       <CardContent className="pt-2">
         <p className="text-xs text-subtext0 line-clamp-2">{mission.primaryObjective.scoring}</p>
-      </CardContent>
-    </Card>
-  );
-}
-
-function MissionCard({ mission }: { mission?: ReturnType<typeof getMissionById> }) {
-  if (!mission) return null;
-
-  return (
-    <Card>
-      <CardHeader className="bg-surface0/50 pb-2">
-        <CardTitle className="text-lg">{mission.name}</CardTitle>
-      </CardHeader>
-      <CardContent className="pt-2">
-        <p className="text-sm text-subtext0 mb-3">{mission.primaryObjective.scoring}</p>
-        <div className="bg-surface0/50 rounded-lg p-3">
-          <h4 className="text-sm font-medium text-text mb-1">Secondary Objectives</h4>
-          <div className="space-y-1">
-            {mission.secondaryOptions.map((sec) => (
-              <div key={sec.id} className="text-xs text-subtext0">
-                • {sec.name} (max {sec.maxPoints})
-              </div>
-            ))}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-function WarlordCard() {
-  const { state } = useGame();
-  const activePlayer = state.turn.activePlayer;
-  const activeSetup = state.players[activePlayer - 1];
-
-  return (
-    <Card>
-      <CardHeader className="bg-surface0/50 pb-2">
-        <div className="flex items-center gap-2">
-          <Crown className="w-4 h-4 text-yellow" />
-          <CardTitle className="text-lg">Warlord</CardTitle>
-        </div>
-      </CardHeader>
-      <CardContent className="pt-2">
-        <div className="text-center">
-          <div className="text-lg font-bold text-text mb-1">
-            {activeSetup.name || `Player ${activePlayer}`}
-          </div>
-          <div className="text-sm text-subtext0">
-            Active this turn
-          </div>
-        </div>
       </CardContent>
     </Card>
   );
