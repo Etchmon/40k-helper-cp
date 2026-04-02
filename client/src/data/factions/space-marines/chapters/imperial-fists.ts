@@ -7,7 +7,7 @@ const IMPERIAL_FISTS_UNIQUE_UNITS: Unit[] = [
     id: 'tor-garadon',
     name: 'Tor Garadon',
     role: 'hq',
-    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'IMPERIAL FISTS', 'INFANTRY', 'CHARACTER', 'TECHMARINE', 'EPIC HERO'],
+    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'IMPERIAL FISTS', 'INFANTRY', 'CHARACTER', 'CAPTAIN', 'GRAVIS', 'EPIC HERO'],
     profiles: [{
       models: 1,
       profile: { move: 5, toughness: 6, save: 3, wounds: 6, leadership: 6, oc: 1, invulnerable: 4 },
@@ -33,7 +33,7 @@ const IMPERIAL_FISTS_UNIQUE_UNITS: Unit[] = [
     keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'IMPERIAL FISTS', 'INFANTRY', 'CHARACTER', 'CAPTAIN', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 5, toughness: 5, save: 2, wounds: 7, leadership: 6, oc: 2, invulnerable: 4 },
+      profile: { move: 5, toughness: 5, save: 2, wounds: 7, leadership: 6, oc: 1, invulnerable: 4 },
       basePoints: 100,
     }],
     weapons: [

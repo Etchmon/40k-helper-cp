@@ -10,7 +10,7 @@ const ULTRAMARINES_UNIQUE_UNITS: Unit[] = [
     keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'ULTRAMARINES', 'INFANTRY', 'CHARACTER', 'CHAPTER MASTER', 'EPIC HERO', 'GRAVIS'],
     profiles: [{
       models: 1,
-      profile: { move: 6, toughness: 6, save: 2, wounds: 6, leadership: 6, oc: 1 },
+      profile: { move: 6, toughness: 6, save: 2, wounds: 6, leadership: 6, oc: 1, invulnerable: 4 },
       basePoints: 200,
     }],
     weapons: [
@@ -47,7 +47,7 @@ const ULTRAMARINES_UNIQUE_UNITS: Unit[] = [
     }],
     weapons: [
       { weaponId: 'boltPistol', isDefault: true, cost: 0 },
-      { weaponId: 'terror-weapon', isDefault: true, cost: 0 },
+      { weaponId: 'terrorWeapon', isDefault: true, cost: 0 },
     ],
     abilities: [
       {
@@ -65,12 +65,12 @@ const ULTRAMARINES_UNIQUE_UNITS: Unit[] = [
     keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'ULTRAMARINES', 'INFANTRY', 'CHARACTER', 'LIEUTENANT', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 6, toughness: 4, save: 3, wounds: 5, leadership: 6, oc: 1 },
+      profile: { move: 6, toughness: 4, save: 3, wounds: 5, leadership: 6, oc: 1, invulnerable: 4 },
       basePoints: 75,
     }],
     weapons: [
       { weaponId: 'boltPistol', isDefault: true, cost: 0 },
-      { weaponId: 'blade-of-triumph', isDefault: true, cost: 0 },
+      { weaponId: 'bladeOfTriumph', isDefault: true, cost: 0 },
     ],
     abilities: [
       {

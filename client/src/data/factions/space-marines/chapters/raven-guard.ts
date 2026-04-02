@@ -31,6 +31,49 @@ const RAVEN_GUARD_UNIQUE_UNITS: Unit[] = [
     ],
     notes: 'Raven Guard Master of Shadows',
   },
+  {
+    id: 'aethon-shaan',
+    name: 'Aethon Shaan',
+    role: 'hq',
+    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'RAVEN GUARD', 'INFANTRY', 'CHARACTER', 'JUMP PACK', 'FLY', 'EPIC HERO', 'CHAPTER MASTER'],
+    profiles: [{
+      models: 1,
+      profile: { move: 14, toughness: 4, save: 3, wounds: 5, leadership: 6, oc: 1, invulnerable: 4 },
+      basePoints: 85,
+    }],
+    weapons: [
+      { weaponId: 'heavyBoltPistol', isDefault: true, cost: 0 },
+      { weaponId: 'clawsOfSeverax', isDefault: true, cost: 0 },
+    ],
+    abilities: [
+      {
+        id: 'deepStrike',
+        name: 'Deep Strike',
+        description: 'This unit can be set up in the Reinforcements step of any Movement phase.',
+      },
+      {
+        id: 'loneOperative',
+        name: 'Lone Operative',
+        description: 'This unit can only be targeted if it is the closest enemy unit.',
+      },
+      {
+        id: 'stealth',
+        name: 'Stealth',
+        description: 'Each time a ranged attack is made against this unit, subtract 1 from the Hit roll.',
+      },
+      {
+        id: 'master-of-shadows',
+        name: 'Master of Shadows',
+        description: 'At the start of the Command phase, select one enemy unit. Until the start of your next Command phase, units in your army can re-roll Charge rolls made against that unit.',
+      },
+      {
+        id: 'blackwing-mantle',
+        name: 'Blackwing Mantle',
+        description: 'You can use the Rapid Ingress Stratagem on this unit for 0 CP, and you can use the Heroic Intervention Stratagem on this unit for 0 CP. A unit can only be targeted by each of these Stratagems once per battle.',
+      },
+    ],
+    notes: 'Raven Guard Chapter Master. Cannot join units. If both Aethon Shaan and Kayvaan Shrike are in your army, Kayvaan Shrike loses the Lone Operative ability.',
+  },
 ];
 
 const RAVEN_GUARD_DETACHMENTS: Detachment[] = [

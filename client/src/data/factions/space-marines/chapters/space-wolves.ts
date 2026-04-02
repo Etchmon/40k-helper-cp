@@ -11,7 +11,7 @@ const SPACE_WOLVES_UNIQUE_UNITS: Unit[] = [
     keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'SPACE WOLVES', 'INFANTRY', 'CHARACTER', 'DREADNOUGHT', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 9, toughness: 9, save: 2, wounds: 8, leadership: 7, oc: 2, invulnerable: 5 },
+      profile: { move: 9, toughness: 9, save: 2, wounds: 8, leadership: 6, oc: 3, invulnerable: 5 },
       basePoints: 160,
     }],
     weapons: [
@@ -35,7 +35,7 @@ const SPACE_WOLVES_UNIQUE_UNITS: Unit[] = [
     keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'SPACE WOLVES', 'INFANTRY', 'CHARACTER', 'JUMP PACK', 'FLY', 'WOLF GUARD', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 7, toughness: 4, save: 3, wounds: 5, leadership: 7, oc: 1, invulnerable: 4 },
+      profile: { move: 7, toughness: 4, save: 3, wounds: 5, leadership: 6, oc: 1, invulnerable: 4 },
       basePoints: 100,
     }],
     weapons: [
@@ -57,7 +57,7 @@ const SPACE_WOLVES_UNIQUE_UNITS: Unit[] = [
     keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'SPACE WOLVES', 'INFANTRY', 'CHARACTER', 'CHAPTER MASTER', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 6, toughness: 5, save: 2, wounds: 8, leadership: 6, oc: 2, invulnerable: 4 },
+      profile: { move: 6, toughness: 6, save: 2, wounds: 12, leadership: 6, oc: 4, invulnerable: 4 },
       basePoints: 110,
     }],
     weapons: [
@@ -295,8 +295,8 @@ const SPACE_WOLVES_UNIQUE_UNITS: Unit[] = [
       basePoints: 140,
     }],
     weapons: [
-      { weaponId: 'bolter', isDefault: true, cost: 0 },
-      { weaponId: 'tempest-hammer', isDefault: true, cost: 0 },
+      { weaponId: 'boltgun', isDefault: true, cost: 0 },
+      { weaponId: 'tempestHammer', isDefault: true, cost: 0 },
     ],
     abilities: [
       {

@@ -37,17 +37,17 @@ const SALAMANDERS_UNIQUE_UNITS: Unit[] = [
     id: 'infernus-squad',
     name: 'Infernus Squad',
     role: 'elites',
-    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'SALAMANDERS', 'INFANTRY', 'GRAVIS', 'INFERNI'],
+    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'SALAMANDERS', 'INFANTRY', 'INFERNI'],
     profiles: [
       {
         models: 5,
-        profile: { move: 5, toughness: 5, save: 3, wounds: 3, leadership: 6, oc: 1 },
-        basePoints: 130,
+        profile: { move: 6, toughness: 4, save: 3, wounds: 2, leadership: 6, oc: 1 },
+        basePoints: 90,
       },
       {
         models: 10,
-        profile: { move: 5, toughness: 5, save: 3, wounds: 3, leadership: 6, oc: 1 },
-        basePoints: 260,
+        profile: { move: 6, toughness: 4, save: 3, wounds: 2, leadership: 6, oc: 1 },
+        basePoints: 180,
       },
     ],
     weapons: [
@@ -61,28 +61,6 @@ const SALAMANDERS_UNIQUE_UNITS: Unit[] = [
       },
     ],
     notes: 'Flamer specialists with improved shooting',
-  },
-  {
-    id: 'pyre-blaster',
-    name: 'Pyre Blaster',
-    role: 'elites',
-    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'SALAMANDERS', 'INFANTRY', 'GRAVIS'],
-    profiles: [{
-      models: 3,
-      profile: { move: 5, toughness: 5, save: 3, wounds: 3, leadership: 6, oc: 1 },
-      basePoints: 110,
-    }],
-    weapons: [
-      { weaponId: 'pyreBlaster', isDefault: true, cost: 0 },
-    ],
-    abilities: [
-      {
-        id: 'promethean-adept',
-        name: 'Promethean Adept',
-        description: 'Each time a model in this unit makes a ranged attack with a Pyre weapon, on an unmodified Hit roll of 5+, resolve one additional hit.',
-      },
-    ],
-    notes: 'Elite flamer specialists',
   },
 ];
 

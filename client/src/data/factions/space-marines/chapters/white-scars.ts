@@ -11,7 +11,7 @@ const WHITE_SCAR_UNIQUE_UNITS: Unit[] = [
     profiles: [{
       models: 1,
       profile: { move: 6, toughness: 4, save: 3, wounds: 5, leadership: 6, oc: 1, invulnerable: 4 },
-      basePoints: 70,
+      basePoints: 60,
     }],
     weapons: [
       { weaponId: 'boltPistol', isDefault: true, cost: 0 },

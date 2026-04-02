@@ -330,7 +330,7 @@ const UNITS: Unit[] = [
     keywords: ['ORKS', 'INFANTRY', 'CHARACTER', 'WARBOSS'],
     profiles: [{
       models: 1,
-      profile: { move: 6, toughness: 5, save: 4, wounds: 6, leadership: 7, oc: 2 },
+      profile: { move: 6, toughness: 5, save: 4, wounds: 6, leadership: 6, oc: 1, invulnerable: 5 },
       basePoints: 80,
     }],
     weapons: [
@@ -347,7 +347,7 @@ const UNITS: Unit[] = [
     keywords: ['ORKS', 'INFANTRY', 'CHARACTER', 'WARBOSS'],
     profiles: [{
       models: 1,
-      profile: { move: 5, toughness: 6, save: 3, wounds: 7, leadership: 7, oc: 2 },
+      profile: { move: 5, toughness: 6, save: 2, wounds: 7, leadership: 6, oc: 1, invulnerable: 5 },
       basePoints: 115,
     }],
     weapons: [
@@ -358,13 +358,13 @@ const UNITS: Unit[] = [
     notes: 'Warlord - heavy armor',
   },
   {
-    id: 'big-meq',
+    id: 'big-mek',
     name: 'Big Mek',
     role: 'hq',
     keywords: ['ORKS', 'INFANTRY', 'CHARACTER', 'MEK'],
     profiles: [{
       models: 1,
-      profile: { move: 5, toughness: 5, save: 4, wounds: 5, leadership: 6, oc: 1 },
+      profile: { move: 5, toughness: 5, save: 4, wounds: 5, leadership: 7, oc: 1 },
       basePoints: 65,
     }],
     weapons: [
@@ -381,7 +381,7 @@ const UNITS: Unit[] = [
     keywords: ['ORKS', 'INFANTRY', 'CHARACTER', 'MEK', 'PSYKER'],
     profiles: [{
       models: 1,
-      profile: { move: 5, toughness: 5, save: 4, wounds: 5, leadership: 6, oc: 1 },
+      profile: { move: 5, toughness: 5, save: 4, wounds: 5, leadership: 7, oc: 1 },
       basePoints: 85,
     }],
     weapons: [
@@ -398,7 +398,7 @@ const UNITS: Unit[] = [
     keywords: ['ORKS', 'INFANTRY', 'CHARACTER', 'PSYKER', 'WEIRDBOY'],
     profiles: [{
       models: 1,
-      profile: { move: 5, toughness: 5, save: 5, wounds: 5, leadership: 7, oc: 1 },
+      profile: { move: 6, toughness: 5, save: 5, wounds: 4, leadership: 7, oc: 1 },
       basePoints: 70,
     }],
     weapons: [
@@ -449,11 +449,13 @@ const UNITS: Unit[] = [
     keywords: ['ORKS', 'INFANTRY', 'CHARACTER', 'EPIC HERO', 'WARBOSS'],
     profiles: [{
       models: 1,
-      profile: { move: 6, toughness: 6, save: 2, wounds: 10, leadership: 8, oc: 3 },
+      profile: { move: 5, toughness: 6, save: 2, wounds: 10, leadership: 6, oc: 4, invulnerable: 4 },
       basePoints: 235,
     }],
     weapons: [
-      { weaponId: 'powerKlaw', isDefault: true, cost: 0 },
+      { weaponId: 'gorksKlawStrike', isDefault: true, cost: 0 },
+      { weaponId: 'gorksKlawSweep', isDefault: false, cost: 0 },
+      { weaponId: 'morksRoar', isDefault: false, cost: 0 },
     ],
     abilities: [ABILITIES.waaagh, ABILITIES.feelsNoPain],
     notes: 'Warlord - includes Makari, 4+ invulnerable save',
@@ -465,11 +467,11 @@ const UNITS: Unit[] = [
     keywords: ['ORKS', 'INFANTRY', 'CHARACTER', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 6, toughness: 3, save: 6, wounds: 4, leadership: 8, oc: 1 },
+      profile: { move: 6, toughness: 3, save: 6, wounds: 4, leadership: 8, oc: 1, invulnerable: 2 },
       basePoints: 65,
     }],
     weapons: [
-      { weaponId: 'grotKnives', isDefault: true, cost: 0 },
+      { weaponId: 'makarisStabba', isDefault: true, cost: 0 },
     ],
     abilities: [ABILITIES.waaagh],
     notes: 'Buffs nearby Warboss',
@@ -481,12 +483,12 @@ const UNITS: Unit[] = [
     keywords: ['ORKS', 'INFANTRY', 'CHARACTER', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 6, toughness: 5, save: 4, wounds: 5, leadership: 7, oc: 2 },
+      profile: { move: 6, toughness: 5, save: 5, wounds: 5, leadership: 7, oc: 1 },
       basePoints: 90,
     }],
     weapons: [
-      { weaponId: 'choppa', isDefault: true, cost: 0 },
-      { weaponId: 'slugga', isDefault: true, cost: 0 },
+      { weaponId: 'daGrabzappa', isDefault: true, cost: 0 },
+      { weaponId: 'zodgrodSlugga', isDefault: true, cost: 0 },
     ],
     abilities: [ABILITIES.waaagh, { id: 'super-runts', name: 'Super Runts', description: 'Gretchin in his unit have a 4+ save and gain Lone Operative.' }, { id: 'special-dose', name: 'Special Dose', description: 'Gretchin in his unit have Feel No Pain 5+.' }],
     notes: 'Warlord - buffs Gretchin',
@@ -498,12 +500,12 @@ const UNITS: Unit[] = [
     keywords: ['ORKS', 'INFANTRY', 'CHARACTER', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 6, toughness: 5, save: 5, wounds: 5, leadership: 7, oc: 2 },
+      profile: { move: 6, toughness: 5, save: 5, wounds: 6, leadership: 6, oc: 1, invulnerable: 5 },
       basePoints: 75,
     }],
     weapons: [
-      { weaponId: 'choppa', isDefault: true, cost: 0 },
-      { weaponId: 'slugga', isDefault: true, cost: 0 },
+      { weaponId: 'morksTeeth', isDefault: true, cost: 0 },
+      { weaponId: 'bossSnikrotSlugga', isDefault: true, cost: 0 },
     ],
     abilities: [ABILITIES.waaagh, { id: 'sneaky', name: 'Sneaky Gits', description: 'Can be set up in Reserves and deep strikes. Enemy units cannot target with ranged attacks unless within 12".' }],
     notes: 'Warlord - deep striking assassin',
@@ -515,11 +517,13 @@ const UNITS: Unit[] = [
     keywords: ['ORKS', 'CAVALRY', 'CHARACTER', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 10, toughness: 8, save: 3, wounds: 8, leadership: 7, oc: 3 },
-      basePoints: 110,
+      profile: { move: 10, toughness: 8, save: 3, wounds: 8, leadership: 6, oc: 3, invulnerable: 4 },
+      basePoints: 145,
     }],
     weapons: [
-      { weaponId: 'bossSaws', isDefault: true, cost: 0 },
+      { weaponId: 'bigChompaJaws', isDefault: true, cost: 0 },
+      { weaponId: 'gutrippa', isDefault: false, cost: 0 },
+      { weaponId: 'thumpGun', isDefault: false, cost: 0 },
     ],
     abilities: [ABILITIES.waaagh, { id: 'big-scrapper', name: 'Big Scrapper', description: 'Feel No Pain 4+.' }],
     notes: 'Warlord - fast character with 4+ Feel No Pain',
@@ -562,18 +566,19 @@ const UNITS: Unit[] = [
     id: 'beastboss',
     name: 'Beastboss',
     role: 'hq',
-    keywords: ['ORKS', 'MONSTER', 'CHARACTER', 'BEASTBOSS'],
+    keywords: ['ORKS', 'INFANTRY', 'CHARACTER', 'BEASTBOSS'],
     profiles: [{
       models: 1,
-      profile: { move: 10, toughness: 7, save: 4, wounds: 8, leadership: 7, oc: 3 },
+      profile: { move: 6, toughness: 5, save: 4, wounds: 6, leadership: 6, oc: 1, invulnerable: 5 },
       basePoints: 100,
     }],
     weapons: [
-      { weaponId: 'bossSaws', isDefault: true, cost: 0 },
-      { weaponId: 'beastpistol', isDefault: true, cost: 0 },
+      { weaponId: 'beastSnaggaKlawBeastboss', isDefault: true, cost: 0 },
+      { weaponId: 'beastchoppaBeastboss', isDefault: false, cost: 0 },
+      { weaponId: 'beastbossShoota', isDefault: false, cost: 0 },
     ],
     abilities: [ABILITIES.waaagh],
-    notes: 'Warlord - on squigosaurus',
+    notes: 'Warlord - on foot',
   },
   {
     id: 'beastboss-on-squigosaurus',
@@ -582,12 +587,14 @@ const UNITS: Unit[] = [
     keywords: ['ORKS', 'MONSTER', 'CHARACTER', 'BEASTBOSS'],
     profiles: [{
       models: 1,
-      profile: { move: 12, toughness: 8, save: 4, wounds: 12, leadership: 7, oc: 4 },
+      profile: { move: 12, toughness: 8, save: 4, wounds: 12, leadership: 6, oc: 4, invulnerable: 5 },
       basePoints: 170,
     }],
     weapons: [
-      { weaponId: 'bossSaws', isDefault: true, cost: 0 },
-      { weaponId: 'beastpistol', isDefault: true, cost: 0 },
+      { weaponId: 'squigosaurJaws', isDefault: true, cost: 0 },
+      { weaponId: 'beastchoppaBeastboss', isDefault: false, cost: 0 },
+      { weaponId: 'beastbossSlugga', isDefault: true, cost: 0 },
+      { weaponId: 'thumpGun', isDefault: false, cost: 0 },
     ],
     abilities: [ABILITIES.waaagh],
     notes: 'Warlord - on Squigosaurus',

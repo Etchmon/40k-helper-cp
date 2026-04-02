@@ -164,7 +164,7 @@ const BLOOD_ANGELS_UNIQUE_UNITS: Unit[] = [
     keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'BLOOD ANGELS', 'INFANTRY', 'CHARACTER', 'CHAPLAIN', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 12, toughness: 4, save: 2, wounds: 5, leadership: 6, oc: 1, invulnerable: 4 },
+      profile: { move: 12, toughness: 4, save: 2, wounds: 5, leadership: 5, oc: 1, invulnerable: 4 },
       basePoints: 95,
     }],
     weapons: [

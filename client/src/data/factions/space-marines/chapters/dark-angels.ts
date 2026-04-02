@@ -124,7 +124,7 @@ const DARK_ANGELS_UNIQUE_UNITS: Unit[] = [
     keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'DARK ANGELS', 'INFANTRY', 'CHARACTER', 'PSYKER', 'LIBRARIAN', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 6, toughness: 4, save: 2, wounds: 4, leadership: 6, oc: 1 },
+      profile: { move: 6, toughness: 4, save: 2, wounds: 4, leadership: 6, oc: 1, invulnerable: 4 },
       basePoints: 75,
     }],
     weapons: [
@@ -158,7 +158,7 @@ const DARK_ANGELS_UNIQUE_UNITS: Unit[] = [
     keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'DARK ANGELS', 'INFANTRY', 'CHARACTER', 'TERMINATOR', 'EPIC HERO'],
     profiles: [{
       models: 1,
-      profile: { move: 5, toughness: 5, save: 2, wounds: 6, leadership: 6, oc: 1 },
+      profile: { move: 5, toughness: 5, save: 2, wounds: 6, leadership: 6, oc: 1, invulnerable: 4 },
       basePoints: 85,
     }],
     weapons: [
@@ -178,6 +178,61 @@ const DARK_ANGELS_UNIQUE_UNITS: Unit[] = [
       },
     ],
     notes: 'Grand Master of the Deathwing',
+  },
+  {
+    id: 'azrael',
+    name: 'Azrael',
+    role: 'hq',
+    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'DARK ANGELS', 'INFANTRY', 'CHARACTER', 'CHAPTER MASTER', 'EPIC HERO', 'DEATHWING'],
+    profiles: [{
+      models: 1,
+      profile: { move: 6, toughness: 4, save: 2, wounds: 6, leadership: 6, oc: 1, invulnerable: 4 },
+      basePoints: 125,
+    }],
+    weapons: [
+      { weaponId: 'lionsWrath', isDefault: true, cost: 0 },
+    ],
+    abilities: [
+      {
+        id: 'supreme-grand-master',
+        name: 'Supreme Grand Master',
+        description: 'While this model is leading a unit, each time a model in that unit makes an attack, re-roll a Hit roll of 1.',
+      },
+      {
+        id: 'shielding-wings',
+        name: 'Shielding Wings',
+        description: 'While this model is leading a unit, models in that unit have the Feel No Pain 4+ ability against Psychic attacks.',
+      },
+    ],
+    notes: 'Supreme Grand Master of the Dark Angels',
+  },
+  {
+    id: 'sammael',
+    name: 'Sammael',
+    role: 'hq',
+    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'DARK ANGELS', 'CHARACTER', 'CAPTAIN', 'FLY', 'EPIC HERO', 'RAVENWING'],
+    profiles: [{
+      models: 1,
+      profile: { move: 12, toughness: 5, save: 3, wounds: 7, leadership: 6, oc: 2, invulnerable: 4 },
+      basePoints: 130,
+    }],
+    weapons: [
+      { weaponId: 'boltPistol', isDefault: true, cost: 0 },
+      { weaponId: 'plasmaIncinerator', isDefault: true, cost: 0 },
+    ],
+    abilities: [
+      {
+        id: 'grand-master-of-the-ravenwing',
+        name: 'Grand Master of the Ravenwing',
+        description: 'While this model is leading a unit, each time a model in that unit makes a Charge move, add 1 to the Charge roll.',
+      },
+      {
+        id: 'ravensword',
+        name: 'Ravensword',
+        description: 'Each time the bearer makes a melee attack that targets a unit that has not been selected to fight this phase, add 1 to the Wound roll.',
+      },
+    ],
+    notes: 'Grand Master of the Ravenwing',
   },
 ];
 

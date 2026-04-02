@@ -57,7 +57,7 @@ function recalculatePoints(
   playerIndex: 0 | 1
 ): [PlayerSetup, PlayerSetup] {
   const player = players[playerIndex];
-  const faction = getFactionById(player.factionId || '');
+  const faction = getFactionById(player.factionId || '') || null;
   const newTotalPoints = calculateArmyPoints(
     player.army,
     faction,

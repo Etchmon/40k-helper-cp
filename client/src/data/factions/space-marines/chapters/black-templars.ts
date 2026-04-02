@@ -89,7 +89,6 @@ const BLACK_TEMPLARS_UNIQUE_UNITS: Unit[] = [
       basePoints: 120,
     }],
     weapons: [
-      { weaponId: 'ferocity', isDefault: true, cost: 0 },
       { weaponId: 'swordOfTheHighMarshals', isDefault: true, cost: 0 },
     ],
     abilities: [
@@ -145,7 +144,7 @@ const BLACK_TEMPLARS_UNIQUE_UNITS: Unit[] = [
     ],
     abilities: [
       {
-        id: 'bastion-sword',
+        id: 'bastion-of-the-emperor',
         name: 'Bastion of the Emperor',
         description: 'Melee weapons the bearer is equipped with have the Lethal Hits keyword.',
       },
