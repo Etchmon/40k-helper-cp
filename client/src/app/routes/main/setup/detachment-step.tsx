@@ -184,13 +184,46 @@ export function DetachmentStep({ currentPlayer, onNext, onBack }: DetachmentStep
                         {enhancement.description}
                       </p>
                     </button>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        </>
-      )}
+                    );
+                  })}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Show Available Stratagems */}
+            {selectedDetachment.stratagems && selectedDetachment.stratagems.length > 0 && (
+              <Card>
+                <CardHeader>
+                  <CardTitle>Available Stratagems</CardTitle>
+                  <CardDescription>Stratagems provided by this detachment</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2 max-h-[300px] overflow-y-auto">
+                    {selectedDetachment.stratagems.map((stratagem) => (
+                      <div
+                        key={stratagem.id}
+                        className="p-3 bg-surface0/30 rounded-lg"
+                      >
+                        <div className="flex justify-between items-start">
+                          <span className="font-medium text-text">{stratagem.name}</span>
+                          <span className="text-sm font-mono text-mauve">
+                            {stratagem.cost} CP
+                          </span>
+                        </div>
+                        <div className="text-xs text-subtext0 mt-1">
+                          {stratagem.type} • {(stratagem.phases || []).join(', ')}
+                        </div>
+                        <p className="text-sm text-subtext0 mt-1 line-clamp-2">
+                          {stratagem.description}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+          </>
+        )}
 
       <Card>
         <CardHeader>

@@ -390,13 +390,13 @@ const SPACE_WOLVES_DETACHMENTS: Detachment[] = [
     },
     enhancements: [
       {
-        id: '芬里尔的祝福',
-        name: "Wolf Lord's BJ",
+        id: 'blessed-of-fenris',
+        name: 'Blessed of Fenris',
         points: 25,
         description: 'The bearer has the Fights First ability.',
       },
       {
-        id: '狼之长矛',
+        id: 'spear-of-russ',
         name: 'Spear of Russ',
         points: 30,
         description: 'Melee weapons the bearer is equipped with have the LETHAL HITS and SUSTAINED HITS 1 keywords.',

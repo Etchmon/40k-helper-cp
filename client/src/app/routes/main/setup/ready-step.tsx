@@ -115,6 +115,79 @@ export function ReadyStep({ onStart, onBack }: ReadyStepProps) {
         {renderPlayerCard(1, false)}
       </div>
 
+      {/* Show army list for non-Combat Patrol games */}
+      {!isCombatPatrol && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Player 1 Army List */}
+          <Card>
+            <CardHeader className="bg-blue/10 py-3">
+              <CardTitle className="text-blue text-sm">
+                {state.players[0].name || 'Player 1'}'s Army
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-3">
+              <div className="space-y-1 max-h-48 overflow-y-auto">
+                {state.players[0].army.map((armyUnit, idx) => {
+                  // Find unit info from faction
+                  const unit = player1Faction?.units.find(u => u.id === armyUnit.unitId) 
+                    || player1Faction?.uniqueUnits?.find(u => u.id === armyUnit.unitId);
+                  if (!unit) return null;
+                  
+                  // Calculate points for this unit
+                  const profile = unit.profiles?.find(p => p.models === armyUnit.quantity);
+                  const points = profile?.basePoints || unit.profiles?.[0]?.basePoints || 0;
+                  
+                  return (
+                    <div key={idx} className="flex justify-between text-sm py-1 border-b border-surface0/30 last:border-0">
+                      <span className="text-text truncate flex-1">{unit.name}</span>
+                      <span className="text-subtext0 font-mono ml-2">{armyUnit.quantity}×{points}</span>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="mt-2 pt-2 border-t border-surface0 text-sm font-medium">
+                <span className="text-subtext0">Total:</span>{' '}
+                <span className="text-blue font-mono">{state.players[0].totalPoints} pts</span>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Player 2 Army List */}
+          <Card>
+            <CardHeader className="bg-red/10 py-3">
+              <CardTitle className="text-red text-sm">
+                {state.players[1].name || 'Player 2'}'s Army
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-3">
+              <div className="space-y-1 max-h-48 overflow-y-auto">
+                {state.players[1].army.map((armyUnit, idx) => {
+                  // Find unit info from faction
+                  const unit = player2Faction?.units.find(u => u.id === armyUnit.unitId) 
+                    || player2Faction?.uniqueUnits?.find(u => u.id === armyUnit.unitId);
+                  if (!unit) return null;
+                  
+                  // Calculate points for this unit
+                  const profile = unit.profiles?.find(p => p.models === armyUnit.quantity);
+                  const points = profile?.basePoints || unit.profiles?.[0]?.basePoints || 0;
+                  
+                  return (
+                    <div key={idx} className="flex justify-between text-sm py-1 border-b border-surface0/30 last:border-0">
+                      <span className="text-text truncate flex-1">{unit.name}</span>
+                      <span className="text-subtext0 font-mono ml-2">{armyUnit.quantity}×{points}</span>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="mt-2 pt-2 border-t border-surface0 text-sm font-medium">
+                <span className="text-subtext0">Total:</span>{' '}
+                <span className="text-red font-mono">{state.players[1].totalPoints} pts</span>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
       {isCombatPatrol && player1Roster && (
         <Card className="border-mauve/30">
           <CardHeader className="bg-mauve/10">

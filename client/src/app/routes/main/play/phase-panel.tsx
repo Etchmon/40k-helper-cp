@@ -62,7 +62,7 @@ export function PhasePanel() {
   const [checkedItems, setCheckedItems] = useState<Record<string, boolean>>({});
   
   // Track if we've processed CP gain for current phase/player to prevent double-processing
-  const cpGainProcessedRef = useRef<string>('');
+  const cpGainProcessedRef = useRef<string>('__init__');
 
   // Reset checkboxes when phase or turn changes
   const currentKey = useMemo(() => `${turn.phase}-${turn.round}`, [turn.phase, turn.round]);

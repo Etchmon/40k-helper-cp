@@ -517,7 +517,6 @@ function gameReducer(state: GameState, action: GameActionType): GameState {
 
     case 'AUTO_GAIN_COMMAND_PHASE_CP': {
       const playerIndex = getPlayerIndex(action.payload.player);
-      const currentGained = state.battle.commandPoints.gainedThisRound[playerIndex];
       
       // Check if already reached the cap for "other sources" this round (not including command phase auto-gain)
       // The command phase auto-gain is separate from the "other sources" cap
@@ -626,6 +625,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
         const parsed = JSON.parse(saved);
         if (isValidGameState(parsed)) {
           dispatch({ type: 'LOAD_GAME', payload: parsed });
+          // eslint-disable-next-line react-hooks/set-state-in-effect
           setHasSavedGame(true);
         } else {
           console.warn('Invalid game state in storage, clearing...');
@@ -670,6 +670,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   // Auto-save when game is playing
   useEffect(() => {
     if (state.status === 'playing') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       saveGame();
     }
   }, [state, saveGame]);

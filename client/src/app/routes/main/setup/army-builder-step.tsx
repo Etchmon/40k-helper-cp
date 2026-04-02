@@ -4,6 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ROLE_ORDER, ROLE_LABELS, POINTS_BY_SIZE, Unit, ArmyUnit } from '@/types/game';
 import { Plus, Minus, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 interface ArmyBuilderStepProps {
   currentPlayer: 1 | 2;
@@ -14,6 +15,7 @@ interface ArmyBuilderStepProps {
 export function ArmyBuilderStep({ currentPlayer, onNext, onBack }: ArmyBuilderStepProps) {
   const { state, dispatch } = useGame();
   const { setup, faction, validation } = usePlayerSetup(currentPlayer);
+  const { toast } = useToast();
   const maxPoints = POINTS_BY_SIZE[state.settings.gameSize];
   const [expandedRoles, setExpandedRoles] = useState<Set<string>>(new Set(['characters', 'hq', 'troops']));
 
@@ -30,13 +32,35 @@ export function ArmyBuilderStep({ currentPlayer, onNext, onBack }: ArmyBuilderSt
   };
 
   const handleAddUnit = (unit: Unit) => {
+    // In 10th edition, clicking Add should always add a FULL squad (minimum squad size)
+    // not increase by 1. Users can adjust quantity in the roster if needed.
+    const minSquadSize = unit.profiles?.[0]?.models || 1;
+    const squadPoints = unit.profiles?.[0]?.basePoints || 0;
+    
     const armyUnit: ArmyUnit = {
       unitId: unit.id,
-      quantity: 1,
+      quantity: minSquadSize,
       weapons: unit.weapons.filter(w => w.isDefault).map(w => w.weaponId),
       enhancementIds: [],
     };
     dispatch({ type: 'ADD_UNIT', payload: { player: currentPlayer, unit: armyUnit } });
+    toast.success('Unit Added', `Added ${unit.name} (${minSquadSize} models, ${squadPoints} pts)`);
+  };
+  
+  const handleAddAnotherUnit = (unit: Unit) => {
+    // When clicking "+" on an existing unit in the roster, add another FULL squad
+    // not just +1 model
+    const minSquadSize = unit.profiles?.[0]?.models || 1;
+    const squadPoints = unit.profiles?.[0]?.basePoints || 0;
+    
+    const armyUnit: ArmyUnit = {
+      unitId: unit.id,
+      quantity: minSquadSize,
+      weapons: unit.weapons.filter(w => w.isDefault).map(w => w.weaponId),
+      enhancementIds: [],
+    };
+    dispatch({ type: 'ADD_UNIT', payload: { player: currentPlayer, unit: armyUnit } });
+    toast.success('Unit Added', `Added another ${unit.name} squad (${squadPoints} pts)`);
   };
 
   const handleRemoveUnit = (unitId: string) => {
@@ -75,6 +99,19 @@ export function ArmyBuilderStep({ currentPlayer, onNext, onBack }: ArmyBuilderSt
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
       <div className="text-center mb-8">
+        {/* Faction Indicator */}
+        {faction && (
+          <div className="mb-3 inline-flex items-center gap-2 px-4 py-2 bg-surface0/50 rounded-full border border-surface1">
+            <span className="text-sm font-medium text-mauve">
+              {faction.name}
+            </span>
+            {faction.subfactions && faction.subfactions.length > 0 && (
+              <span className="text-xs text-subtext0">
+                ({faction.subfactions[0].name})
+              </span>
+            )}
+          </div>
+        )}
         <h2 className="text-2xl font-bold text-text mb-2">
           {playerName}'s Army
         </h2>
@@ -102,9 +139,21 @@ export function ArmyBuilderStep({ currentPlayer, onNext, onBack }: ArmyBuilderSt
               <div className="space-y-2">
                 {setup.army.map((armyUnit) => {
                   const unit = allUnitsInFaction.find(u => u.id === armyUnit.unitId);
-                  if (!unit) return null;
-                  const basePoints = unit.profiles?.[0]?.basePoints ?? 0;
-                  const unitPoints = basePoints * armyUnit.quantity;
+                  if (!unit || !unit.profiles || unit.profiles.length === 0) return null;
+                  
+                  // Calculate points using the same logic as validation
+                  const exactProfile = unit.profiles.find((p: { models: number }) => p.models === armyUnit.quantity);
+                  let unitPoints = 0;
+                  if (exactProfile) {
+                    unitPoints = exactProfile.basePoints;
+                  } else {
+                    // Fallback calculation for variable quantities
+                    const baseProfile = unit.profiles[0];
+                    const minModels = baseProfile.models;
+                    const pointsPerModel = baseProfile.basePoints / minModels;
+                    unitPoints = Math.round(pointsPerModel * armyUnit.quantity);
+                  }
+                  
                   return (
                     <div
                       key={armyUnit.unitId}
@@ -125,8 +174,14 @@ export function ArmyBuilderStep({ currentPlayer, onNext, onBack }: ArmyBuilderSt
                         </button>
                         <span className="w-6 md:w-8 text-center font-mono text-sm">{armyUnit.quantity}</span>
                         <button
-                          onClick={() => handleUpdateQuantity(armyUnit.unitId, armyUnit.quantity + 1)}
+                          onClick={() => {
+                            const unit = allUnitsInFaction.find(u => u.id === armyUnit.unitId);
+                            if (unit) {
+                              handleAddAnotherUnit(unit);
+                            }
+                          }}
                           className="p-1.5 rounded hover:bg-surface1 touch-manipulation"
+                          title="Add another full squad"
                         >
                           <Plus className="w-3 h-3 md:w-4 md:h-4" />
                         </button>
@@ -179,6 +234,7 @@ export function ArmyBuilderStep({ currentPlayer, onNext, onBack }: ArmyBuilderSt
                       <div className="p-2 space-y-1">
                         {characterUnits.map((unit) => {
                           const isAdded = setup.army.some(u => u.unitId === unit.id);
+                          const profile = unit.profiles?.[0]?.profile;
                           return (
                             <div
                               key={unit.id}
@@ -190,8 +246,18 @@ export function ArmyBuilderStep({ currentPlayer, onNext, onBack }: ArmyBuilderSt
                                 <div className="font-medium text-sm text-text truncate">
                                   {unit.name}
                                 </div>
-                                <div className="text-xs text-subtext0 font-mono">
-                                  {unit.profiles[0].basePoints} pts
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <div className="text-xs text-subtext0 font-mono">
+                                    {unit.profiles[0].basePoints} pts
+                                  </div>
+                                  {profile && (
+                                    <div className="text-[10px] text-overlay1 flex gap-1" title={`M:${profile.move}" T:${profile.toughness} Sv:${profile.save}+ W:${profile.wounds}`}>
+                                      <span className="px-1 bg-surface0 rounded">M{profile.move}</span>
+                                      <span className="px-1 bg-surface0 rounded">T{profile.toughness}</span>
+                                      <span className="px-1 bg-surface0 rounded">Sv{profile.save}</span>
+                                      <span className="px-1 bg-surface0 rounded">W{profile.wounds}</span>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                               <Button
@@ -233,38 +299,49 @@ export function ArmyBuilderStep({ currentPlayer, onNext, onBack }: ArmyBuilderSt
                         )}
                       </div>
                     </button>
-                    {isExpanded && (
-                      <div className="p-2 space-y-1">
-                        {hqUnits.map((unit) => {
-                          const isAdded = setup.army.some(u => u.unitId === unit.id);
-                          return (
-                            <div
-                              key={unit.id}
-                              className={`flex items-center justify-between p-2 rounded ${
-                                isAdded ? 'bg-mauve/20' : 'bg-surface1/50 hover:bg-surface1'
-                              }`}
-                            >
-                              <div className="flex-1 min-w-0">
-                                <div className="font-medium text-sm text-text truncate">
-                                  {unit.name}
-                                </div>
-                                <div className="text-xs text-subtext0 font-mono">
-                                  {unit.profiles[0].basePoints} pts
-                                </div>
-                              </div>
-                              <Button
-                                size="sm"
-                                variant={isAdded ? 'ghost' : 'default'}
-                                onClick={() => handleAddUnit(unit)}
-                                disabled={isAdded}
+                      {isExpanded && (
+                        <div className="p-2 space-y-1">
+                          {hqUnits.map((unit) => {
+                            const isAdded = setup.army.some(u => u.unitId === unit.id);
+                            const profile = unit.profiles?.[0]?.profile;
+                            return (
+                              <div
+                                key={unit.id}
+                                className={`flex items-center justify-between p-2 rounded ${
+                                  isAdded ? 'bg-mauve/20' : 'bg-surface1/50 hover:bg-surface1'
+                                }`}
                               >
-                                {isAdded ? 'Added' : 'Add'}
-                              </Button>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    )}
+                                <div className="flex-1 min-w-0">
+                                  <div className="font-medium text-sm text-text truncate">
+                                    {unit.name}
+                                  </div>
+                                  <div className="flex items-center gap-2 flex-wrap">
+                                    <div className="text-xs text-subtext0 font-mono">
+                                      {unit.profiles[0].basePoints} pts
+                                    </div>
+                                    {profile && (
+                                      <div className="text-[10px] text-overlay1 flex gap-1" title={`M:${profile.move}" T:${profile.toughness} Sv:${profile.save}+ W:${profile.wounds}`}>
+                                        <span className="px-1 bg-surface0 rounded">M{profile.move}</span>
+                                        <span className="px-1 bg-surface0 rounded">T{profile.toughness}</span>
+                                        <span className="px-1 bg-surface0 rounded">Sv{profile.save}</span>
+                                        <span className="px-1 bg-surface0 rounded">W{profile.wounds}</span>
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                                <Button
+                                  size="sm"
+                                  variant={isAdded ? 'ghost' : 'default'}
+                                  onClick={() => handleAddUnit(unit)}
+                                  disabled={isAdded}
+                                >
+                                  {isAdded ? 'Added' : 'Add'}
+                                </Button>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
                   </div>
                 );
               })()}
@@ -294,6 +371,7 @@ export function ArmyBuilderStep({ currentPlayer, onNext, onBack }: ArmyBuilderSt
                       <div className="p-2 space-y-1">
                         {units.map((unit) => {
                           const isAdded = setup.army.some(u => u.unitId === unit.id);
+                          const profile = unit.profiles?.[0]?.profile;
                           return (
                             <div
                               key={unit.id}
@@ -305,8 +383,18 @@ export function ArmyBuilderStep({ currentPlayer, onNext, onBack }: ArmyBuilderSt
                                 <div className="font-medium text-sm text-text truncate">
                                   {unit.name}
                                 </div>
-                                <div className="text-xs text-subtext0 font-mono">
-                                  {unit.profiles[0].basePoints} pts
+                                <div className="flex items-center gap-2 flex-wrap">
+                                  <div className="text-xs text-subtext0 font-mono">
+                                    {unit.profiles[0].basePoints} pts
+                                  </div>
+                                  {profile && (
+                                    <div className="text-[10px] text-overlay1 flex gap-1" title={`M:${profile.move}" T:${profile.toughness} Sv:${profile.save}+ W:${profile.wounds}`}>
+                                      <span className="px-1 bg-surface0 rounded">M{profile.move}</span>
+                                      <span className="px-1 bg-surface0 rounded">T{profile.toughness}</span>
+                                      <span className="px-1 bg-surface0 rounded">Sv{profile.save}</span>
+                                      <span className="px-1 bg-surface0 rounded">W{profile.wounds}</span>
+                                    </div>
+                                  )}
                                 </div>
                               </div>
                               <Button

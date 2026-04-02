@@ -12,12 +12,12 @@ const BLOOD_ANGELS_UNIQUE_UNITS: Unit[] = [
       {
         models: 5,
         profile: { move: 6, toughness: 4, save: 3, wounds: 2, leadership: 6, oc: 1 },
-        basePoints: 130,
+        basePoints: 85,
       },
       {
         models: 10,
         profile: { move: 6, toughness: 4, save: 3, wounds: 2, leadership: 6, oc: 1 },
-        basePoints: 260,
+        basePoints: 160,
       },
     ],
     weapons: [

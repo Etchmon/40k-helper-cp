@@ -389,6 +389,18 @@ export const SHARED_WEAPONS: Record<string, Weapon> = {
     damage: '1',
     keywords: ['HEAVY'],
   },
+  pyreblaster: {
+    id: 'pyreblaster',
+    name: 'Pyreblaster',
+    type: 'ranged',
+    range: '12"',
+    attacks: 'D6',
+    skill: 'N/A',
+    strength: '5',
+    armorPenetration: '-1',
+    damage: '1',
+    keywords: ['TORRENT', 'IGNORES COVER'],
+  },
   closeCombatWeapon: {
     id: 'close-combat-weapon',
     name: 'Close Combat Weapon',
@@ -1811,12 +1823,12 @@ export const SHARED_UNITS: Unit[] = [
       {
         models: 5,
         profile: { move: 6, toughness: 4, save: 3, wounds: 2, leadership: 6, oc: 1 },
-        basePoints: 105,
+        basePoints: 80,
       },
       {
         models: 10,
         profile: { move: 6, toughness: 4, save: 3, wounds: 2, leadership: 6, oc: 1 },
-        basePoints: 210,
+        basePoints: 160,
       },
     ],
     weapons: [
@@ -1826,6 +1838,31 @@ export const SHARED_UNITS: Unit[] = [
     ],
     abilities: [SHARED_ABILITIES.oathOfMoment, SHARED_ABILITIES.andTheyShallKnowNoFear, SHARED_ABILITIES.assaultIntercessors],
     notes: 'BATTLELINE',
+  },
+  {
+    id: 'infernus-squad',
+    name: 'Infernus Squad',
+    role: 'elites',
+    keywords: ['IMPERIUM', 'ADEPTUS ASTARTES', 'SPACE MARINES', 'INFANTRY', 'PYLONS'],
+    profiles: [
+      {
+        models: 5,
+        profile: { move: 6, toughness: 4, save: 3, wounds: 2, leadership: 6, oc: 1 },
+        basePoints: 90,
+      },
+      {
+        models: 10,
+        profile: { move: 6, toughness: 4, save: 3, wounds: 2, leadership: 6, oc: 1 },
+        basePoints: 180,
+      },
+    ],
+    weapons: [
+      { weaponId: 'pyreblaster', isDefault: true, cost: 0 },
+      { weaponId: 'boltPistol', isDefault: true, cost: 0 },
+      { weaponId: 'closeCombatWeapon', isDefault: true, cost: 0 },
+    ],
+    abilities: [SHARED_ABILITIES.oathOfMoment, SHARED_ABILITIES.andTheyShallKnowNoFear],
+    notes: 'Pyre Marines - flame weapons ignore cover',
   },
   {
     id: 'heavy-intercessor-squad',

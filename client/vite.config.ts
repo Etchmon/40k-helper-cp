@@ -1,5 +1,5 @@
-// <reference types="vitest" />
-// <reference types="vite/client" />
+/// <reference types="vitest" />
+/// <reference types="vite/client" />
 
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
@@ -26,5 +26,11 @@ export default defineConfig({
     target: 'es2020',
     // Generate source maps for production debugging (optional - disable for smaller bundles)
     sourcemap: false,
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/test/setup.ts',
+    include: ['src/**/*.test.{ts,tsx}', 'src/**/*.spec.{ts,tsx}'],
   },
 });

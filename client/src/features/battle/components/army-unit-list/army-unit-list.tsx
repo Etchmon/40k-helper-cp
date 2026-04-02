@@ -87,9 +87,20 @@ export function ArmyUnitList({ compact = false, horizontal = false }: ArmyUnitLi
     } else if (!isCombatPatrol && faction) {
       for (const armyUnit of army) {
         const unitData = getUnitById(armyUnit.unitId, faction);
-        if (!unitData) continue;
+        if (!unitData || !unitData.profiles || unitData.profiles.length === 0) continue;
         
-        const profile = unitData.profiles?.[0];
+        // Use the same logic as validation: try to find exact profile match
+        const exactProfile = unitData.profiles.find((p: { models: number }) => p.models === armyUnit.quantity);
+        let unitPoints = 0;
+        if (exactProfile) {
+          unitPoints = exactProfile.basePoints;
+        } else {
+          // Fallback calculation for variable quantities
+          const baseProfile = unitData.profiles[0];
+          const minModels = baseProfile.models;
+          const pointsPerModel = baseProfile.basePoints / minModels;
+          unitPoints = Math.round(pointsPerModel * armyUnit.quantity);
+        }
         
         units.push({
           id: unitData.id,
@@ -97,10 +108,10 @@ export function ArmyUnitList({ compact = false, horizontal = false }: ArmyUnitLi
           role: unitData.role,
           models: armyUnit.quantity,
           keywords: unitData.keywords || [],
-          weapons: unitData.weapons?.map(w => ({ name: w.weaponId, profile: '' })) || [],
-          abilities: unitData.abilities?.map(a => a.name) || [],
+          weapons: unitData.weapons?.map((w: { weaponId: string }) => ({ name: w.weaponId, profile: '' })) || [],
+          abilities: unitData.abilities?.map((a: { name: string }) => a.name) || [],
           notes: unitData.notes,
-          points: profile ? profile.basePoints * armyUnit.quantity : 0,
+          points: unitPoints,
         });
       }
     }

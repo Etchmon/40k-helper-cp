@@ -121,6 +121,11 @@ export function MissionStep({ onNext, onBack }: MissionStepProps) {
                       <span className="text-sm text-mauve">Max {sec.maxPoints} pts</span>
                     </div>
                     <p className="text-sm text-subtext0">{sec.description}</p>
+                    {sec.scoring && (
+                      <div className="mt-2 pt-2 border-t border-surface1 text-xs text-overlay1">
+                        <span className="font-medium">Scoring:</span> {sec.scoring}
+                      </div>
+                    )}
                   </div>
                 ))}
               </div>

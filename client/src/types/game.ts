@@ -421,6 +421,7 @@ export interface SecondaryObjective {
   name: string;
   description: string;
   maxPoints: number;
+  scoring?: string;
 }
 
 export interface Mission {

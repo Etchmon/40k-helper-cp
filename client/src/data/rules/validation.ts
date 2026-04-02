@@ -3,7 +3,7 @@
  * This module provides basic validation functions for army composition
  */
 
-import type { ArmyUnit, Faction, Enhancement, GameSize } from '../../types/game';
+import type { ArmyUnit, Faction, GameSize } from '../../types/game';
 
 /**
  * Extended validation result with all required fields
@@ -32,18 +32,36 @@ export function calculateArmyPoints(
   // Add unit costs
   for (const armyUnit of army) {
     const unit = faction.units.find(u => u.id === armyUnit.unitId);
-    if (unit) {
-      // Find the profile that matches the quantity
-      const profile = unit.profiles.find(p => p.models === armyUnit.quantity) 
-        || unit.profiles[0];
-      if (profile) {
-        total += profile.basePoints;
+    if (unit && unit.profiles && unit.profiles.length > 0) {
+      // First, try to find a profile that exactly matches the quantity
+      // This handles squad-based units like Intercessors (5 or 10 models)
+      const exactProfile = unit.profiles.find(p => p.models === armyUnit.quantity);
+      
+      if (exactProfile) {
+        // Use the exact profile - points already represent total for that squad size
+        total += exactProfile.basePoints;
         
-        // Add weapon costs
+        // Add weapon costs (per squad, not per model for default weapons)
         for (const weaponId of armyUnit.weapons) {
           const weaponOption = unit.weapons.find(w => w.weaponId === weaponId);
-          if (weaponOption) {
+          if (weaponOption && !weaponOption.isDefault) {
             total += weaponOption.cost;
+          }
+        }
+      } else {
+        // No exact match - calculate based on minimum squad size
+        // This handles units that can have variable quantities
+        const baseProfile = unit.profiles[0];
+        const minModels = baseProfile.models;
+        const pointsPerModel = baseProfile.basePoints / minModels;
+        
+        total += pointsPerModel * armyUnit.quantity;
+        
+        // Add weapon costs per model
+        for (const weaponId of armyUnit.weapons) {
+          const weaponOption = unit.weapons.find(w => w.weaponId === weaponId);
+          if (weaponOption && !weaponOption.isDefault) {
+            total += weaponOption.cost * armyUnit.quantity;
           }
         }
       }
@@ -117,31 +135,17 @@ export function validateArmy(
     warnings.push(`Army is under point limit: ${totalPoints}/${maxPoints}`);
   }
   
-  // Check for required units (Battle Line)
-  const hasBattleLine = army.some(armyUnit => {
-    const unit = faction.units.find(u => u.id === armyUnit.unitId);
-    return unit?.keywords.includes('BATTLELINE');
-  });
+  // 10th edition matched play does NOT require specific unit types (HQ, Battle Line)
+  // These were removed in the 10th edition rules - no warnings needed
   
-  if (!hasBattleLine && maxPoints >= 1000) {
-    warnings.push('No Battle Line units selected');
+  // Check enhancement limit (max 3 per army)
+  if (enhancementIds.length > 3) {
+    errors.push(`Too many enhancements: ${enhancementIds.length}/3`);
   }
-  
-  // Check for HQ units
-  const hasHQ = army.some(armyUnit => {
-    const unit = faction.units.find(u => u.id === armyUnit.unitId);
-    return unit?.role === 'hq';
-  });
-  
-  if (!hasHQ && maxPoints >= 1000) {
-    warnings.push('No HQ units selected');
-  }
-  
-  // Check for warlord if we have HQ units
-  if (hasHQ && !warlordId) {
-    warnings.push('No warlord selected');
-  }
-  
+
+  // Warlord selection is done in the Detachment step, not during army building
+  // So we don't show a warning here - it will be handled in the detachment validation
+
   return {
     valid: errors.length === 0,
     isValid: errors.length === 0,
